@@ -3,9 +3,12 @@
  Run it with python test.py
 """
 from nasdaq import parser
+import settings
 
 def test_nasdaq():
-    p = parser.Parser("data/NASDAQ")
+    config = settings.Settings()
+    data_path = config.data_path
+    p = parser.Parser(data_path)
 
     for record in p:
         print record
