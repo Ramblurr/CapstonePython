@@ -55,3 +55,17 @@ Now let's install all of the dependencies:
 
     pip install -U -r requirements.txt
 
+Download Dataset
+---------------
+Because the dataset(s) are huge and static they shouldn't be in source control.
+So, you'll have to download them to your machine manually. git is set to ignore
+them once they are downladed.
+
+Download the dataset:
+
+    cd data/
+    ./download_data.sh
+
+And you're done!
+
+On windows, crack open the script and do what it does by hand.
