@@ -23,7 +23,8 @@ This provides a simple and effective way to manage python
 dependencies across platforms.
 
 Install virtualenv:
-If you are on linux you can install it via your package manager:
+If you are on linux you can install it via your package manager.
+
 on Ubuntu/Debian:
 
     aptitude install python-virtualenv
@@ -36,6 +37,11 @@ otherwise install it with easy_install:
 
     easy_install -U virtualenv
     easy_install -U pip
+
+on windows you should be able to follow the above commands, but check this site
+for  more info:
+* http://wiki.pylonshq.com/display/pylonscookbook/Using+a+Virtualenv+Sandbox
+
 
 Now let's create a new virtual environment, and begin using it:
 
