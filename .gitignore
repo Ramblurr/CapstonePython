@@ -1,0 +1,8 @@
+*~
+*.pyc
+.eric4project/
+.ropeproject/
+*.e4p
+data/NASDAQ
+
+data/*-data.tar.bz2
