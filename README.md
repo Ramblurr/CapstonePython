@@ -10,6 +10,7 @@ Follow the following instructions:
 2. Create a virtual Python environment for dependencies
 3. Install dependencies
 4. Download dataset
+5. Setup auto deploy
 
 Check out source code
 ---------------------
@@ -69,3 +70,21 @@ Download the dataset:
 And you're done!
 
 On windows, crack open the script and do what it does by hand.
+
+Setup Auto Deploy
+-----------------
+
+Add the following to ~/.ssh/config
+
+    Host capstone
+        User ubuntu
+        Hostname ec2-50-16-70-228.compute-1.amazonaws.com
+        IdentityFile /home/ramblurr/.ec2/pk-<yourname>-cassandra.pem
+
+In the git directory run the following:
+
+    git remote add deploy git+ssh://capstone.com/home/ubuntu/CapstonePython
+
+Now when ever you want to update the live website run:
+
+    git push deploy master
