@@ -7,9 +7,17 @@ import os, glob
 urls = ( '/seed', 'seed' )
 app = web.application(urls, globals())
 
+ip_address = ""
+
 class seed:
     def GET(self):
-        return "192.168.2.0.0"
+        global ip_address
+        return ip_address
+
+    def POST(self):
+        global ip_address
+        ip_address = web.input()['ip']
+        
 
 if __name__ == "__main__":
     app.run()
