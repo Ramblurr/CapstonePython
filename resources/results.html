@@ -1,4 +1,4 @@
-$def with (name)
+$def with (records)
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -33,14 +33,24 @@ $def with (name)
 </div>
 <div class="form">
 <p> This is just a placeholder form.. we need to come up with what sort of form inputs we want to use.</p>
-	<table>
-		#for $record in $request
-		<tr>
-			<td>
-				
-			</td>
-		<tr>
-	</table> 
+
+<table id="box-table-a" summary="records">
+    <thead>
+        <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Open Price</th>
+            <th scope="col">Close Price</th>
+        </tr>
+    </thead>
+    <tbody>
+       $for rec in records:
+        <tr>
+            <td>$rec['date']</td>
+            <td>$rec['open']</td>
+            <td>$rec['close']</td>
+        <tr>
+    </tbody>
+</table>
 </div>
 
 </body>

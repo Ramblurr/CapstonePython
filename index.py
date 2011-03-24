@@ -6,16 +6,27 @@ import os, glob
 from web import form
 
 urls = ( '/', 'index',
+         '/results', 'results',
          '/res/(.*)', 'static')
 render = web.template.render('resources/')
 app = web.application(urls, globals())
 
 request = form.Form (
-	form.symbol('Symbol', form.notnull),
-	form.startdate('Start Date', form.notnull),
-	form.enddate('End Date', form.notnull),
-	form.submit('Request', type="submit"),
+	form.Textbox('Symbol', form.notnull),
+	form.Textbox('Start Date', form.notnull),
+	form.Textbox('End Date', form.notnull),
+	form.Button('Request', type="submit"),
 )
+
+class results:
+    def GET(self):
+        records = [
+            {"date": "2011/01/01", "open": "$500.00", "close": "$501.01"},
+            {"date": "2011/01/01", "open": "$500.00", "close": "$501.01"},
+            {"date": "2011/01/01", "open": "$500.00", "close": "$501.01"},
+            {"date": "2011/01/01", "open": "$500.00", "close": "$501.01"}
+            ]
+        return render.results(records)
 
 class index:
     def GET(self):
