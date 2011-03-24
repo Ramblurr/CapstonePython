@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 echo "Downloading dataset"
 wget http://binaryelysium.com/nasdaq-data.tar.bz2
 
