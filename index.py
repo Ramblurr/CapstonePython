@@ -12,10 +12,10 @@ render = web.template.render('resources/')
 app = web.application(urls, globals())
 
 request = form.Form (
-	form.Textbox('Symbol', form.notnull),
-	form.Textbox('Start Date', form.notnull),
-	form.Textbox('End Date', form.notnull),
-	form.Button('Request', type="submit"),
+	form.Textbox('symbol', form.notnull),
+	form.Textbox('startdate', form.notnull),
+	form.Textbox('enddate', form.notnull),
+	form.Button('Request', type="submit")
 )
 
 class results:
@@ -33,19 +33,20 @@ class index:
         return render.index("hi")
 
     def POST(self):
-	form = form.request()
+	form = request()
 	if not form.validates():
 		return "Failure. Did you select an option for all the fields?"
-	sym = form['Symbol'].value
-	start = form['Start Date'].value
-	end = form['End Date'].value
+	sym = form['symbol'].value
+	start = form['startdate'].value
+	end = form['enddate'].value
+	return 
 	cass = cassandrabase.CassandraBase()
-	result = case.request(sym, start, end)
-	output = ''	
-	for record in result:
-		output += record
-		output += "/n"
-	return output
+	result = cass.request(sym, start, end)
+	#output = ''	
+	#for record in result:
+		#output += record
+		#output += "/n"
+	#return output
 
 
 class static:
