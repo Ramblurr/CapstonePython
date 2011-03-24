@@ -10,6 +10,9 @@ class CassandraBase(object):
         sys = SystemManager(self.config.host)
         print sys.list_keyspaces()
 
+    def request(sym, start, end):
+	return "derp"
+
     def create_schema(self):
         sys = SystemManager(self.config.host)
         if not self.config.keyspace in sys.list_keyspaces():
