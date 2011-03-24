@@ -3,15 +3,39 @@
 
 import web
 import os, glob
+from web import form
 
 urls = ( '/', 'index',
          '/res/(.*)', 'static')
 render = web.template.render('resources/')
 app = web.application(urls, globals())
 
+request = form.Form (
+	form.symbol('Symbol', form.notnull),
+	form.startdate('Start Date', form.notnull),
+	form.enddate('End Date', form.notnull),
+	form.submit('Request', type="submit"),
+)
+
 class index:
     def GET(self):
         return render.index("hi")
+
+    def POST(self):
+	form = form.request()
+	if not form.validates():
+		return "Failure. Did you select an option for all the fields?"
+	sym = form['Symbol'].value
+	start = form['Start Date'].value
+	end = form['End Date'].value
+	cass = cassandrabase.CassandraBase()
+	result = case.request(sym, start, end)
+	output = ''	
+	for record in result:
+		output += record
+		output += "/n"
+	return output
+
 
 class static:
     # static whitelist
