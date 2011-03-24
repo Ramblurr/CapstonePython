@@ -19,8 +19,7 @@ def test_nasdaq():
 def test_cassandra():
     print "Connecting..."
     cass = cassandrabase.CassandraBase()
-    print "Listing keyspaces:"
-    print cass.sys.list_keyspaces()
+    cass.test()
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
