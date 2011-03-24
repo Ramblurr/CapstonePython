@@ -3,6 +3,7 @@
 
 import web
 import os, glob
+import datetime
 from web import form
 
 urls = ( '/', 'index',
@@ -37,16 +38,16 @@ class index:
 	if not form.validates():
 		return "Failure. Did you select an option for all the fields?"
 	sym = form['symbol'].value
-	start = form['startdate'].value
-	end = form['enddate'].value
-	return 
+	start_string = form['startdate'].value
+	end_string = form['enddate'].value
+
+	date_format = "%Y/%m/%d"
+	start = datetime.strptime(start_string, date_format)
+	end = datetime.strptime(end_string, date_format)
+
 	cass = cassandrabase.CassandraBase()
-	result = cass.request(sym, start, end)
-	#output = ''	
-	#for record in result:
-		#output += record
-		#output += "/n"
-	#return output
+	result = case.get_by_sym_range(sym, start, end)
+	return result
 
 
 class static:

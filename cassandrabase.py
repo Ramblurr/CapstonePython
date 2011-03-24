@@ -10,8 +10,13 @@ class CassandraBase(object):
         sys = SystemManager(self.config.host)
         print sys.list_keyspaces()
 
-    def request(sym, start, end):
-	return "derp"
+    def get_by_sym_range(sym, start, end):
+	sym_expr = pycassa.create_index_expression("symbol", sym)
+	start_expr = pycassa.create_index_expression("date", start, GTE)
+	end_expr = pycassa.create_index_expression("date", end, LTE)
+	clause = pycasse.create_index_clause([sym_expr, start_expr, end_expr)
+	result = self.STOCKS.get_indexed_slices(clause)
+	return result
 
     def create_schema(self):
         sys = SystemManager(self.config.host)
@@ -33,13 +38,14 @@ class CassandraBase(object):
         print id,record
         self.STOCKS.insert(str(id), record)
 
-    def get_symbol(self, symbol):
+    def get_by_symbol(self, symbol):
         sym_expr = pycassa.create_index_expression("symbol", symbol)
         clause = pycassa.create_index_clause([sym_expr])
         result = self.STOCKS.get_indexed_slices(clause)
         return result
+
     def get_uuid(self, uuid):
-        print self.STOCKS.get(uuid)
+        return self.STOCKS.get(uuid)
 
 cass = CassandraBase()
 cass.connect()
