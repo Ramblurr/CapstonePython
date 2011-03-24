@@ -8,6 +8,7 @@ from web import form
 
 urls = ( '/', 'index',
          '/results', 'results',
+         '/seed', 'seed',
          '/res/(.*)', 'static')
 render = web.template.render('resources/')
 app = web.application(urls, globals())
@@ -19,9 +20,16 @@ request = form.Form (
 	form.Button('Request', type="submit")
 )
 
-class results:
+ip_address = ""
+
+class seed:
     def GET(self):
-        return render.results(records)
+        global ip_address
+        return ip_address
+
+    def POST(self):
+        global ip_address
+        ip_address = web.input()['ip']
 
 class index:
     def GET(self):
