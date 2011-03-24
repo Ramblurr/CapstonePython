@@ -3,7 +3,7 @@
 
 import web
 import os, glob
-import datetime
+from datetime import datetime
 from web import form
 
 urls = ( '/', 'index',
@@ -21,12 +21,6 @@ request = form.Form (
 
 class results:
     def GET(self):
-        records = [
-            {"date": "2011/01/01", "open": "$500.00", "close": "$501.01"},
-            {"date": "2011/01/01", "open": "$500.00", "close": "$501.01"},
-            {"date": "2011/01/01", "open": "$500.00", "close": "$501.01"},
-            {"date": "2011/01/01", "open": "$500.00", "close": "$501.01"}
-            ]
         return render.results(records)
 
 class index:
@@ -34,20 +28,27 @@ class index:
         return render.index("hi")
 
     def POST(self):
-	form = request()
-	if not form.validates():
-		return "Failure. Did you select an option for all the fields?"
-	sym = form['symbol'].value
-	start_string = form['startdate'].value
-	end_string = form['enddate'].value
+        form = request()
+        if not form.validates():
+            return "Failure. Did you select an option for all the fields?"
+        sym = form['symbol'].value
+        start_string = form['startdate'].value
+        end_string = form['enddate'].value
 
-	date_format = "%Y/%m/%d"
-	start = datetime.strptime(start_string, date_format)
-	end = datetime.strptime(end_string, date_format)
 
-	cass = cassandrabase.CassandraBase()
-	result = case.get_by_sym_range(sym, start, end)
-	return result
+        date_format = "%m/%d/%Y"
+        start = datetime.strptime(start_string, date_format)
+        end = datetime.strptime(end_string, date_format)
+
+        #cass = cassandrabase.CassandraBase()
+        #results = case.get_by_sym_range(sym, start, end)
+        records = [
+            {"date": "2011/01/01", "open": "$500.00", "close": "$501.01"},
+            {"date": "2011/01/01", "open": "$500.00", "close": "$501.01"},
+            {"date": "2011/01/01", "open": "$500.00", "close": "$501.01"},
+            {"date": "2011/01/01", "open": "$500.00", "close": "$501.01"}
+            ]
+        return render.results(records)
 
 
 class static:
