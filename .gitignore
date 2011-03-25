@@ -1,5 +1,6 @@
 *~
 *.swp
+*.swp.*
 *.pyc
 .eric4project/
 .ropeproject/
