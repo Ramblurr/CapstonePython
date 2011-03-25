@@ -1,4 +1,4 @@
-$def with (records)
+$def with (symbol, records)
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -32,8 +32,7 @@ $def with (records)
 <h1> Stocks Demo </h1>
 </div>
 <div class="form">
-<p> This is just a placeholder form.. we need to come up with what sort of form inputs we want to use.</p>
-
+<h2>Records for $symbol</h2>
 <table id="box-table-a" summary="records">
     <thead>
         <tr>
@@ -46,8 +45,8 @@ $def with (records)
        $for rec in records:
         <tr>
             <td>$rec['date']</td>
-            <td>$rec['open']</td>
-            <td>$rec['close']</td>
+            <td>$rec['price_open']</td>
+            <td>$rec['price_close']</td>
         <tr>
     </tbody>
 </table>
