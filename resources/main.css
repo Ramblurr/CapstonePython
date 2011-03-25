@@ -29,6 +29,16 @@ h1 {
 /*         line-height: 70px; */
 }
 
+h2 {
+        font-family: 'Arvo', Georgia, Times, serif;
+        font-size: 39px;
+}
+
+h3 {
+        font-family: 'Arvo', Georgia, Times, serif;
+        font-size: 29px;
+}
+
 p {
         font-family: 'PT Sans', Helvetica, Arial, sans-serif;
         font-size: 16px;
