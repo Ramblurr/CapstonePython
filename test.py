@@ -23,12 +23,14 @@ def test_cassandra():
 def test_insert():
     cass = cassandrabase.CassandraBase()
     cass.connect()
-    cass.create_schema()
     config = settings.Settings()
     data_path = config.data_path
     p = parser.Parser(data_path)
     for rec in p:
+        d = rec['date'].replace("-", "")
+        rec['date'] = int(d)
         cass.insert(rec)
+        print rec
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
