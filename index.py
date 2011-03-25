@@ -5,6 +5,7 @@ import web
 import os, glob
 from datetime import datetime
 from web import form
+import cassandrabase
 
 urls = ( '/', 'index',
          '/results', 'results',
@@ -45,18 +46,18 @@ class index:
 
 
         date_format = "%m/%d/%Y"
-        start = datetime.strptime(start_string, date_format)
-        end = datetime.strptime(end_string, date_format)
+        start = int(datetime.strptime(start_string, date_format).strftime("%Y%m%d"))
+        end = int(datetime.strptime(end_string, date_format).strftime("%Y%m%d"))
 
-        #cass = cassandrabase.CassandraBase()
-        #results = case.get_by_sym_range(sym, start, end)
-        records = [
-            {"date": "2011/01/01", "open": "$500.00", "close": "$501.01"},
-            {"date": "2011/01/01", "open": "$500.00", "close": "$501.01"},
-            {"date": "2011/01/01", "open": "$500.00", "close": "$501.01"},
-            {"date": "2011/01/01", "open": "$500.00", "close": "$501.01"}
-            ]
-        return render.results(records)
+        cass = cassandrabase.CassandraBase()
+        cass.connect()
+        records = cass.get_by_sym_range(sym, start, end)
+        records_processed = []
+        for r in records:
+            tmp = r[1]
+            tmp['date'] = datetime.strptime(str(tmp['date']), "%Y%m%d").strftime("%Y-%m-%d")
+            records_processed.append(tmp)
+        return render.results(sym, records_processed)
 
 
 class static:
