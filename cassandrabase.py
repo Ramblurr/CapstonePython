@@ -11,11 +11,11 @@ class CassandraBase(object):
         print sys.list_keyspaces()
 
     def get_by_sym_range(sym, start, end):
-	sym_expr = pycassa.create_index_expression("symbol", sym)
-	start_expr = pycassa.create_index_expression("date", start, GTE)
-	end_expr = pycassa.create_index_expression("date", end, LTE)
-	clause = pycasse.create_index_clause([sym_expr, start_expr, end_expr)
-	result = self.STOCKS.get_indexed_slices(clause)
+        sym_expr = pycassa.create_index_expression("symbol", sym)
+        start_expr = pycassa.create_index_expression("date", start, GTE)
+        end_expr = pycassa.create_index_expression("date", end, LTE)
+        clause = pycasse.create_index_clause([sym_expr, start_expr, end_expr])
+        result = self.STOCKS.get_indexed_slices(clause)
 	return result
 
     def create_schema(self):
@@ -49,8 +49,9 @@ class CassandraBase(object):
 
 cass = CassandraBase()
 cass.connect()
-#print cass.get_uuid("7d79917e-5652-11e0-b5e4-0026c649247a")
-from nasdaq.parser import Parser
-p = Parser("data/NASDAQ")
-for record in p:
-    cass.insert(p)
+from nasdaq import parser
+p = parser.Parser("data/NASDAQ")
+for r in p:
+    d = r['date'].replace("-", "")
+    r['date'] = int(d)
+    cass.insert(r)
