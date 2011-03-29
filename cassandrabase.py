@@ -38,6 +38,16 @@ class CassandraBase(object):
         id = uuid.uuid1()
         self.STOCKS.insert(str(id), record)
 
+    def insert_batch(self, parser):
+        b = self.STOCKS.batch(queue_size=1000)
+        i = 0
+        for rec in parser:
+            id = uuid.uuid1()
+            b.insert(str(id), rec)
+            if i % 1000 == 0:
+                print rec
+            i += 1
+
     def get_by_symbol(self, symbol):
         sym_expr = pycassa.create_index_expression("symbol", symbol)
         clause = pycassa.create_index_clause([sym_expr])
