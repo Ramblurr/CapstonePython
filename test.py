@@ -26,11 +26,14 @@ def test_insert():
     config = settings.Settings()
     data_path = config.data_path
     p = parser.Parser(data_path)
+    i = 0
     for rec in p:
         d = rec['date'].replace("-", "")
         rec['date'] = int(d)
         cass.insert(rec)
-        print rec
+        if i % 100000 == 0:
+            print rec
+        i += 1
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
