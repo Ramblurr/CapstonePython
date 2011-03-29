@@ -42,6 +42,8 @@ class CassandraBase(object):
         b = self.STOCKS.batch(queue_size=1000)
         i = 0
         for rec in parser:
+            d = rec['date'].replace("-", "")
+            rec['date'] = int(d)
             id = uuid.uuid1()
             b.insert(str(id), rec)
             if i % 1000 == 0:
