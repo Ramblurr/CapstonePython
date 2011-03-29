@@ -36,7 +36,6 @@ class CassandraBase(object):
 
     def insert(self, record):
         id = uuid.uuid1()
-        print id,record
         self.STOCKS.insert(str(id), record)
 
     def get_by_symbol(self, symbol):
