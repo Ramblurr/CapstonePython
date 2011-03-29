@@ -31,7 +31,10 @@ def test_insert():
         d = rec['date'].replace("-", "")
         rec['date'] = int(d)
         cass.insert(rec)
+        if i % 100 == 0:
+            sys.stdout.write(".")
         if i % 100000 == 0:
+            print ""
             print rec
         i += 1
 
