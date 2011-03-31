@@ -9,3 +9,4 @@ data/NASDAQ
 capstone/
 
 data/*-data.tar.bz2
+current_seed.txt
