@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import web
-import os, glob
+import os, glob, time
 from datetime import datetime
 from web import form
 import cassandrabase
@@ -51,13 +51,17 @@ class index:
 
         cass = cassandrabase.CassandraBase()
         cass.connect()
+        
+        start_time = time.time()
         records = cass.get_by_sym_range(sym, start, end)
         records_processed = []
         for r in records:
             tmp = r[1]
             tmp['date'] = datetime.strptime(str(tmp['date']), "%Y%m%d").strftime("%Y-%m-%d")
             records_processed.append(tmp)
-        return render.results(sym, records_processed)
+        elapsed_time = (time.time() - start_time)
+
+        return render.results(sym, records_processed, elapsed_time)
 
 
 class static:
