@@ -21,16 +21,22 @@ request = form.Form (
 	form.Button('Request', type="submit")
 )
 
-ip_address = ""
+def get_seed():
+    ip_store = "current_seed.txt"
+    with open(ip_store, "r") as f:
+        return f.read()
 
+def set_seed(ip):
+    ip_store = "current_seed.txt"
+    with open(ip_store, "w") as f:
+        f.write(ip)
 class seed:
     def GET(self):
-        global ip_address
-        return ip_address
+        return get_seed()
 
     def POST(self):
-        global ip_address
         ip_address = web.input()['ip']
+        set_seed(ip_address)
 
 class index:
     def GET(self):
@@ -50,8 +56,7 @@ class index:
         end = int(datetime.strptime(end_string, date_format).strftime("%Y%m%d"))
 
         cass = cassandrabase.CassandraBase()
-        global ip_address
-        cass.connect(ip_address)
+        cass.connect(get_seed())
 
         start_time = time.time()
         records = cass.get_by_sym_range(sym, start, end)
