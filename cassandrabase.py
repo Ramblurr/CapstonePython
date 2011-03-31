@@ -26,7 +26,7 @@ class CassandraBase(object):
 
 
     def connect(self, host=None):
-        if not host:
+        if host is None:
             self.pool = pycassa.connect(self.config.keyspace, [self.config.host])
             print "connecting to %s" %(self.config.host)
         else:
