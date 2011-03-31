@@ -19,17 +19,6 @@ class CassandraBase(object):
         result = self.STOCKS.get_indexed_slices(clause)
 	return result
 
-    def create_schema(self):
-        sys = SystemManager(self.config.host)
-        if not self.config.keyspace in sys.list_keyspaces():
-            sys.create_keyspace(self.config.keyspace, replication_factor=1)
-        # it probably doesn't make sense to use the UTF8_TYPE here..
-        # what should we use instead?
-        #        sys.create_column_family(self.config.keyspace, "Stocks", comparator_type=TIME_UUID_TYPE)
-
-        # create the secondary indexes
-        sys.create_index(self.config.keyspace, "Stocks", "symbol", UTF8_TYPE, index_name="symbol_index")
-
     def connect(self):
         self.pool = pycassa.connect(self.config.keyspace, [self.config.host])
         self.STOCKS = pycassa.ColumnFamily(self.pool, "Stocks")
