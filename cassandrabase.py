@@ -19,6 +19,12 @@ class CassandraBase(object):
         result = self.STOCKS.get_indexed_slices(clause)
 	return result
 
+    def get_symbols_by_partial(self, sym_partial):
+        sym_expr = pycassa.create_index_expression("symbol", sym_partial, GTE)
+        clause = pycassa.create_index_clause([sym_expr])
+        result = self.STOCKS.get_indexed_slices(clause)
+
+
     def connect(self):
         self.pool = pycassa.connect(self.config.keyspace, [self.config.host])
         self.STOCKS = pycassa.ColumnFamily(self.pool, "Stocks")
