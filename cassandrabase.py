@@ -28,8 +28,10 @@ class CassandraBase(object):
     def connect(self, host=None):
         if not host:
             self.pool = pycassa.connect(self.config.keyspace, [self.config.host])
+            print "connecting to %s" %(self.config.host)
         else:
-            self.pool = pycassa.connect(self.config.keyspace, host)
+            self.pool = pycassa.connect(self.config.keyspace, [host])
+            print "connecting to %s" %(host)
         self.STOCKS = pycassa.ColumnFamily(self.pool, "Stocks")
 
     def insert(self, record):
