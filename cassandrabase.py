@@ -25,8 +25,11 @@ class CassandraBase(object):
         result = self.STOCKS.get_indexed_slices(clause)
 
 
-    def connect(self):
-        self.pool = pycassa.connect(self.config.keyspace, [self.config.host])
+    def connect(self, host=None):
+        if not host:
+            self.pool = pycassa.connect(self.config.keyspace, [self.config.host])
+        else:
+            self.pool = pycassa.connect(self.config.keyspace, host)
         self.STOCKS = pycassa.ColumnFamily(self.pool, "Stocks")
 
     def insert(self, record):

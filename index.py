@@ -50,8 +50,9 @@ class index:
         end = int(datetime.strptime(end_string, date_format).strftime("%Y%m%d"))
 
         cass = cassandrabase.CassandraBase()
-        cass.connect()
-        
+        global ip_address
+        cass.connect(ip_address)
+
         start_time = time.time()
         records = cass.get_by_sym_range(sym, start, end)
         records_processed = []
