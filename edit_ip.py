@@ -12,6 +12,7 @@ stream.close()
 
 config['listen_address'] = ip
 config['rpc_address'] = "0.0.0.0"
+config['seeds'] = ['localhost']
 stream = file(config_file, 'w')
 yaml.dump(config, stream, default_flow_style=False)
 
