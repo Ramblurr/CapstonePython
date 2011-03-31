@@ -54,13 +54,41 @@ class index:
         
         start_time = time.time()
         records = cass.get_by_sym_range(sym, start, end)
-        records_processed = []
+        records_unsorted = []
         for r in records:
             tmp = r[1]
             tmp['date'] = datetime.strptime(str(tmp['date']), "%Y%m%d").strftime("%Y-%m-%d")
-            records_processed.append(tmp)
+            records_unsorted.append(tmp)
+            
+	records_processed = sorted(records_unsorted, key = lambda k: k['date'])
         elapsed_time = (time.time() - start_time)
+	/**
+	y_max = 0
+	for(q in records_processed)
+		temp = q[1]
+		if(temp['stock_price_adj_close'] > y_max)
+			y_max = temp['stock_price_adj_close']
+		
+	chart = SimpleLineChart(400, 400, y_range=[0, y_max])
+	data = []
+	for(s in records_process)
+		temp = s[1]
+		data.append('temp[stock_price_adj_closed'])
+	
+	chart.add_data(data)
+	chart.set_colours(['0000FF'])
+	chart.fill_linear_stripes(Chart.CHART, 0, CCCCCC, 0.2, 'FFFFFF', 0.2)
+	chart.set_grid(0, 25, 5, 5)
 
+	left_axis = range(0, max_y + 1, 25)
+	left_axis[0] = ''
+	chart.set_axis_labels(Axis.LEFT, left_axis)
+
+	x_labels = []
+	x_counter = 0
+	for(t in records_processed)	
+		x_counter = records_processed[1]['date']:
+	**/
         return render.results(sym, records_processed, elapsed_time)
 
 
