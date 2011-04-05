@@ -6,6 +6,7 @@ import os, glob, time
 from datetime import datetime
 from web import form
 import cassandrabase
+from pygooglechart import Chart
 from pygooglechart import SimpleLineChart
 from pygooglechart import Axis
 
