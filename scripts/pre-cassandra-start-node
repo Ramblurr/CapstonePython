@@ -6,4 +6,4 @@ su - ubuntu -c "cd /home/ubuntu/CapstonePython &&  git pull origin master;"
 /home/ubuntu/CapstonePython/get_ip.py
 
 # clear cassandra db
-rm -rf /var/lib/cassandra/data/*
+#rm -rf /var/lib/cassandra/data/*
