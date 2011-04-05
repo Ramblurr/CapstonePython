@@ -73,7 +73,7 @@ class index:
 	y_max = 0
 	for q in records_processed:
 		if q['price_adj_close'] > y_max:
-			y_max = temp['stock_price_adj_close']
+			y_max = temp['price_adj_close']
 		
 	chart = SimpleLineChart(400, 400, y_range=(0, y_max))
 	data = []
