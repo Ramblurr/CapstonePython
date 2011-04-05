@@ -6,6 +6,9 @@ import os, glob, time
 from datetime import datetime
 from web import form
 import cassandrabase
+from pygooglechart import Chart
+from pygooglechart import SimpleLineChart
+from pygooglechart import Axis
 
 urls = ( '/', 'index',
          '/results', 'results',
@@ -42,6 +45,23 @@ class index:
     def GET(self):
         return render.index("hi")
 
+    def getMonth(x):
+        return {
+            '1': "Jan",        
+	    '2': "Feb",
+            '3': "Mar",
+            '4': "Apr",
+            '5': "May",
+            '6': "Jun",
+            '7': "Jul",
+            '8': "Aug",
+            '9': "Sep",
+            '10': "Oct",
+            '11': "Nov",
+            '12': "Dec",
+        }[x]
+
+
     def POST(self):
         form = request()
         if not form.validates():
@@ -60,56 +80,37 @@ class index:
 
         start_time = time.time()
         records = cass.get_by_sym_range(sym, start, end)
+
         records_unsorted = []
         for r in records:
-            tmp = r[1]
-            tmp['date'] = datetime.strptime(str(tmp['date']), "%Y%m%d").strftime("%Y-%m-%d")
-            records_unsorted.append(tmp)
+	    temp = r[1]
+            temp['date'] = datetime.strptime(str(temp['date']), "%Y%m%d")
+            records_unsorted.append(temp)
             
 	records_processed = sorted(records_unsorted, key = lambda k: k['date'])
         elapsed_time = (time.time() - start_time)
 
-	y_max = 0
+	y_max = 0.0
+	data = []
 	for q in records_processed:
-		temp = q[1]
-		if temp['stock_price_adj_close'] > y_max:
-			y_max = temp['stock_price_adj_close']
+            data.append(q['price_adj_close'])
+	    if q['price_adj_close'] > y_max:
+	        y_max = q['price_adj_close']
 		
 	chart = SimpleLineChart(400, 400, y_range=[0, y_max])
-	data = []
-	for s in records_process:
-		temp = s[1]
-		data.append(temp['stock_price_adj_closed'])
 	
 	chart.add_data(data)
 	chart.set_colours(['0000FF'])
-	chart.fill_linear_stripes(Chart.CHART, 0, CCCCCC, 0.2, 'FFFFFF', 0.2)
+	chart.fill_linear_stripes(Chart.CHART, 0, 'CCCCCC', 0.2, 'FFFFFF', 0.2)
 	chart.set_grid(0, 25, 5, 5)
 
-	left_axis = range(0, max_y + 1, 25)
+	y_max_double = float(y_max)
+	left_axis = range(0, y_max_double + 1, 25)
 	left_axis[0] = ''
 	chart.set_axis_labels(Axis.LEFT, left_axis)
 
 	x_labels = []
-
-	def getMonth(x):
-		return {
-		'1': "Jan",
-		'2': "Feb",
-		'3': "Mar",
-		'4': "Apr",
-		'5': "May",
-		'6': "Jun",
-		'7': "Jul",
-		'8': "Aug",
-		'9': "Sep",
-		'10': "Oct",
-		'11': "Nov",
-		'12': "Dec", 
-	}[x]
-
 		
-	x_labels.append( (getMonth(records_processed[0]['date'].month ),records_processed[0]['date'].year ))
 	for t in records_processed:	
 		x_labels.append( (getMonth(t['date'].month ), t['date'].year))
 			
