@@ -59,7 +59,7 @@ class index:
             '10': "Oct",
             '11': "Nov",
             '12': "Dec",
-        }[x]
+        }.get(x, "ERROR")
 
 
     def POST(self):
