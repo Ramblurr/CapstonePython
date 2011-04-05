@@ -111,7 +111,6 @@ class index:
 	}[x]
 
 		
-	x_labels.append( (getMonth(records_processed[0]['date'].month ),records_processed[0]['date'].year ))
 	for t in records_processed:	
 		x_labels.append( (getMonth(t['date'].month ), t['date'].year))
 			
