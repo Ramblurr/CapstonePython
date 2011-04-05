@@ -71,7 +71,7 @@ class index:
 
 	y_max = 0
 	for q in records_processed:
-		temp = q[1]
+		temp = q[0]
 		if temp['stock_price_adj_close'] > y_max:
 			y_max = temp['stock_price_adj_close']
 		
