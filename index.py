@@ -114,9 +114,10 @@ class index:
 		
 	for t in records_processed:
 		print(t['date'].month)	
-		x_labels.append( (self.getMonth(t['date'].month ), t['date'].year))
+                label = (self.getMonth(t['date'].month ), t['date'].year)
+                if not label in x_labels:
+                    x_labels.append( label )
 			
-	x_labels = set(x_labels)
 	chart.set_axis_labels(Axis.LEFT, left_axis)
 	chart.set_axis_labels(Axis.BOTTOM, x_labels)
 
