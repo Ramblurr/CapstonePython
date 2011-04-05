@@ -95,8 +95,8 @@ class index:
 	for q in records_processed:
 	    temp = float(q['price_adj_close'])
             data.append(temp)
-	    if temp  > y_max:
-		y_max = q['price_adj_close']
+	    if temp > y_max:
+		y_max = temp
 		
 	chart = SimpleLineChart(400, 400, y_range=[0, y_max])
 	
