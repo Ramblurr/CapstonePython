@@ -63,8 +63,9 @@ class index:
 
         records_unsorted = []
         for r in records:
-            r['date'] = datetime.strptime(str(r['date']), "%Y%m%d").strftime("%Y-%m-%d")
-            records_unsorted.append(r)
+	    temp = r[1]
+            temp['date'] = datetime.strptime(str(temp['date']), "%Y%m%d").strftime("%Y-%m-%d")
+            records_unsorted.append(temp)
             
 	records_processed = sorted(records_unsorted, key = lambda k: k['date'])
         elapsed_time = (time.time() - start_time)
