@@ -77,7 +77,7 @@ class index:
 		
 	chart = SimpleLineChart(400, 400, y_range=(0, y_max))
 	data = []
-	for s in records_process:
+	for s in records_processed:
 		temp = s[1]
 		data.append(temp['stock_price_adj_closed'])
 	
