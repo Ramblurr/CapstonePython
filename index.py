@@ -45,6 +45,23 @@ class index:
     def GET(self):
         return render.index("hi")
 
+     def getMonth(x):
+                return {
+                '1': "Jan",
+                '2': "Feb",
+                '3': "Mar",
+                '4': "Apr",
+                '5': "May",
+                '6': "Jun",
+                '7': "Jul",
+                '8': "Aug",
+                '9': "Sep",
+                '10': "Oct",
+                '11': "Nov",
+                '12': "Dec",
+        }[x]
+
+
     def POST(self):
         form = request()
         if not form.validates():
@@ -93,23 +110,6 @@ class index:
 	chart.set_axis_labels(Axis.LEFT, left_axis)
 
 	x_labels = []
-
-	def getMonth(x):
-		return {
-		'1': "Jan",
-		'2': "Feb",
-		'3': "Mar",
-		'4': "Apr",
-		'5': "May",
-		'6': "Jun",
-		'7': "Jul",
-		'8': "Aug",
-		'9': "Sep",
-		'10': "Oct",
-		'11': "Nov",
-		'12': "Dec", 
-	}[x]
-
 		
 	for t in records_processed:	
 		x_labels.append( (getMonth(t['date'].month ), t['date'].year))
