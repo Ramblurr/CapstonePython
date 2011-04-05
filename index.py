@@ -105,7 +105,8 @@ class index:
 	chart.set_grid(0, 25, 5, 5)
 
 	y_max_double = float(y_max)
-	left_axis = range(0, y_max_double + 1, 25)
+	y_max_double = y_max_double + 1
+	left_axis = range(0, y_max_double, 25)
 	left_axis[0] = ''
 	chart.set_axis_labels(Axis.LEFT, left_axis)
 
