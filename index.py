@@ -60,10 +60,11 @@ class index:
 
         start_time = time.time()
         records = cass.get_by_sym_range(sym, start, end)
-        records_unsorted = []
-        for r in records:
-            r['date'] = datetime.strptime(str(r['date']), "%Y%m%d").strftime("%Y-%m-%d")
-            records_unsorted.append(r)
+	records_unsorted = records
+#        records_unsorted = []
+#        for r in records:
+#            r['date'] = datetime.strptime(str(r['date']), "%Y%m%d").strftime("%Y-%m-%d")
+#            records_unsorted.append(r)
             
 	records_processed = sorted(records_unsorted, key = lambda k: k['date'])
         elapsed_time = (time.time() - start_time)
