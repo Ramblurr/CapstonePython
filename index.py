@@ -87,8 +87,8 @@ class index:
 	chart.fill_linear_stripes(Chart.CHART, 0, 'CCCCCC', 0.2, 'FFFFFF', 0.2)
 	chart.set_grid(0, 25, 5, 5)
 
-	y_max_double = Double(y_max)
-	left_axis = range(0, y_max_double + 1.0, 25)
+	y_max_double = int(y_max)
+	left_axis = range(0, y_max_double + 1, 25)
 	left_axis[0] = ''
 	chart.set_axis_labels(Axis.LEFT, left_axis)
 
