@@ -84,7 +84,7 @@ class index:
 	
 	chart.add_data(data)
 	chart.set_colours(['0000FF'])
-	chart.fill_linear_stripes(Chart.CHART, 0, CCCCCC, 0.2, 'FFFFFF', 0.2)
+	chart.fill_linear_stripes(Chart.CHART, 0, 'CCCCCC', 0.2, 'FFFFFF', 0.2)
 	chart.set_grid(0, 25, 5, 5)
 
 	left_axis = range(0, max_y + 1, 25)
