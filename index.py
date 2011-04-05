@@ -112,7 +112,8 @@ class index:
 
 	x_labels = []
 		
-	for t in records_processed:	
+	for t in records_processed:
+		print(t['date'].month)	
 		x_labels.append( (self.getMonth(t['date'].month ), t['date'].year))
 			
 	x_labels = set(x_labels)
