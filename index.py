@@ -45,7 +45,7 @@ class index:
     def GET(self):
         return render.index("hi")
 
-    def getMonth(x):
+    def getMonth(self, x):
         return {
             '1': "Jan",        
 	    '2': "Feb",
@@ -112,7 +112,7 @@ class index:
 	x_labels = []
 		
 	for t in records_processed:	
-		x_labels.append( (getMonth(t['date'].month ), t['date'].year))
+		x_labels.append( (self.getMonth(t['date'].month ), t['date'].year))
 			
 	x_labels = set(x_labels)
 	chart.set_axis_labels(Axis.LEFT, left_axis)
