@@ -15,7 +15,7 @@ stream.close()
 seed = urllib2.urlopen("http://%s/seed" %(host)).read().strip()
 config['listen_address'] = my_ip
 config['seeds'] = [seed]
-config['rpc_address'] = "0.0.0.0"
+config['rpc_address'] = my_ip
 
 
 stream = file(config_file, 'w')

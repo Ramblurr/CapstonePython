@@ -1,4 +1,0 @@
-#!/bin/bash
-
-# clear cassandra db
-rm -rf /var/lib/cassandra/data/*

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+su - ubuntu -c "cd /home/ubuntu/CapstonePython &&  git pull origin master;"
+
+#SEED
+/home/ubuntu/CapstonePython/edit_ip.py
+
+# clear cassandra db
+rm -rf /var/lib/cassandra/data/*
