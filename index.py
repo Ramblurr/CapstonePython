@@ -74,14 +74,13 @@ class index:
         elapsed_time = (time.time() - start_time)
 
 	y_max = 0.0
+	data = []
 	for q in records_processed:
+            data.append(s['price_adj_closed'])
 	    if q['price_adj_close'] > y_max:
 	        y_max = q['price_adj_close']
 		
 	chart = SimpleLineChart(400, 400, y_range=[0, y_max])
-	data = []
-	for s in records_processed:
-            data.append(s['price_adj_closed'])
 	
 	chart.add_data(data)
 	chart.set_colours(['0000FF'])
