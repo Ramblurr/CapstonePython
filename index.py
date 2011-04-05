@@ -76,7 +76,7 @@ class index:
 	y_max = 0.0
 	data = []
 	for q in records_processed:
-            data.append(q['price_adj_closed'])
+            data.append(q['price_adj_close'])
 	    if q['price_adj_close'] > y_max:
 	        y_max = q['price_adj_close']
 		
