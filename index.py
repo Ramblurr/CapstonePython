@@ -73,10 +73,10 @@ class index:
 	records_processed = sorted(records_unsorted, key = lambda k: k['date'])
         elapsed_time = (time.time() - start_time)
 
-	y_max = 0
+	y_max = 0.0
 	for q in records_processed:
-		if q['price_adj_close'] > y_max:
-			y_max = q['price_adj_close']
+	    if q['price_adj_close'] > y_max:
+	        y_max = q['price_adj_close']
 		
 	chart = SimpleLineChart(400, 400, y_range=[0, y_max])
 	data = []
