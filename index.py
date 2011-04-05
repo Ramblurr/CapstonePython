@@ -93,9 +93,10 @@ class index:
 	y_max = 0.0
 	data = []
 	for q in records_processed:
-            data.append(q['price_adj_close'])
-	    if q['price_adj_close'] > y_max:
-	        y_max = q['price_adj_close']
+	    temp = float(q['price_adj_close'])
+            data.append(temp)
+	    if temp  > y_max:
+		y_max = q['price_adj_close']
 		
 	chart = SimpleLineChart(400, 400, y_range=[0, y_max])
 	
@@ -104,9 +105,8 @@ class index:
 	chart.fill_linear_stripes(Chart.CHART, 0, 'CCCCCC', 0.2, 'FFFFFF', 0.2)
 	chart.set_grid(0, 25, 5, 5)
 
-	y_max_double = float(y_max)
-	y_max_double = y_max_double + 1
-	left_axis = range(0, y_max_double, 25)
+	y_max_output = y_max + 1
+	left_axis = range(0, y_max_output, 25)
 	left_axis[0] = ''
 	chart.set_axis_labels(Axis.LEFT, left_axis)
 
