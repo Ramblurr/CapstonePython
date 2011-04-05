@@ -81,8 +81,7 @@ class index:
 	chart = SimpleLineChart(400, 400, y_range=[0, y_max])
 	data = []
 	for s in records_processed:
-		temp = s[1]
-		data.append(temp['price_adj_closed'])
+		data.append(s['price_adj_closed'])
 	
 	chart.add_data(data)
 	chart.set_colours(['0000FF'])
