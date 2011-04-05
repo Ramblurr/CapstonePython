@@ -98,7 +98,7 @@ class index:
 	    if temp > y_max:
 		y_max = temp
 		
-	chart = SimpleLineChart(400, 400, y_range=[0, y_max])
+	chart = SimpleLineChart(800, 800, y_range=[0, y_max])
 	
 	chart.add_data(data)
 	chart.set_colours(['0000FF'])
