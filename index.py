@@ -67,7 +67,7 @@ class index:
         records_unsorted = []
         for r in records:
 	    temp = r[1]
-            temp['date'] = datetime.strptime(str(temp['date']), "%Y%m%d").strftime("%Y-%m-%d")
+            temp['date'] = datetime.strptime(str(temp['date']), "%Y%m%d")
             records_unsorted.append(temp)
             
 	records_processed = sorted(records_unsorted, key = lambda k: k['date'])
