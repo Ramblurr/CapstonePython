@@ -62,18 +62,16 @@ class index:
         records = cass.get_by_sym_range(sym, start, end)
         records_unsorted = []
         for r in records:
-            tmp = r[1]
-            tmp['date'] = datetime.strptime(str(tmp['date']), "%Y%m%d").strftime("%Y-%m-%d")
-            records_unsorted.append(tmp)
+            r['date'] = datetime.strptime(str(r['date']), "%Y%m%d").strftime("%Y-%m-%d")
+            records_unsorted.append(r)
             
 	records_processed = sorted(records_unsorted, key = lambda k: k['date'])
         elapsed_time = (time.time() - start_time)
 
 	y_max = 0
 	for q in records_processed:
-		temp = q[0]
-		if temp['stock_price_adj_close'] > y_max:
-			y_max = temp['stock_price_adj_close']
+		if q['stock_price_adj_close'] > y_max:
+			y_max = q['stock_price_adj_close']
 		
 	chart = SimpleLineChart(400, 400, y_range=(0, y_max))
 	data = []
