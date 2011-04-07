@@ -1,6 +1,77 @@
+Queries we want to do
+date range
+multiple symbols with same date range
+partial symbol lookup (symbol range)
+symbol and date range
+
+
+
+OLD SCHEMA:
 connect localhost/9160;
 create keyspace NASDAQ;
 use NASDAQ;
 create column family Stocks with comparator=UTF8Type 
 and column_metadata=[{column_name: symbol, validation_class: UTF8Type, index_type: KEYS}
 {column_name: date, validation_class: LongType, index_type: KEYS}];
+
+
+NEW SCHEMA:
+create column family Stocks2 with comparator=UTF8Type and column_type=Super and subcomparator=UTF8Type;
+
+Symbol {
+  Date 1 {
+    open:
+    close:
+    ...
+  }
+  Date 2 {
+    open:
+    close:
+    ...
+  }
+  ...
+}
+
+Date {
+  Symbol 1 {
+    open: 
+    close:
+    ...
+  }
+  Symbol 2 {
+    open: 
+    close:
+    ...
+  }
+  ...
+}
+
+example:
+GOOG {
+ 2005/01/01 {
+    open: 500,
+    close: 501
+ }
+ 2005/01/02 {
+    open: 501,
+    close: 502
+ }
+}
+
+2005/01/01 {
+  GOOG{
+    open: 501,
+    close: 502
+ }
+  AAPL {
+    open: 501,
+    close: 502
+ }
+}
+
+Example partial query
+from: GOA 
+GO
+GOOG
+GOGO
+to: GP
