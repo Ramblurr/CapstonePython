@@ -59,6 +59,7 @@ class CassandraBase(object):
     def insert_batch2(self, parser):
         b = self.STOCKS2.batch(queue_size=1000)
         i = 0
+        last = ''
         for rec in parser:
             symbol = rec['symbol']
             date = rec['date']
@@ -66,7 +67,9 @@ class CassandraBase(object):
             #del rec['date']
             b.insert(symbol, {date: rec})
             b.insert(date, {symbol: rec})
-            self.SYMBOLS.insert(symbol[0], {symbol:''})
+            if last != symbol:
+                self.SYMBOLS.insert(symbol[0], {symbol:''})
+            last = symbol
             if i % 1000 == 0:
                 print rec
             i += 1
