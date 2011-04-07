@@ -122,14 +122,22 @@ class index:
 #	chart.fill_linear_stripes(Chart.CHART, 0, 'CCCCCC', 0.1, 'FFFFFF', 0.2)
 	chart.set_grid(0, 25, 5, 5)
 
-	y_max_output = y_max + difference
-	left_axis = range(y_min_foo, y_max_foo, 1.00)
-#	left_axis[0] = ''
+#	y_max_output = y_max + difference
+#	left_axis = range(y_min_foo, y_max_foo, 1.00)
+#	left_axis[0] = y_min
+
+	left_axis = []
+	label = y_min_foo
+	counter = 0
+	while y_min_foo < y_max_foo:
+	    left_axis[counter] = y_min_foo
+	    y_min_foo = y_min_foo + 1.00
+
+	label[counter] = y_min_foo
 
 	x_labels = []
 		
 	for t in records_processed:
-		print(t['date'].month)	
                 label = (self.getMonth(t['date'].month ), t['date'].year)
                 if not label in x_labels:
                     x_labels.append( label )
