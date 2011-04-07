@@ -69,6 +69,41 @@ GOOG {
  }
 }
 
+Stock Symbol Column Family:
+
+create column family StockSymbols with comparator=UTF8Type;
+
+http://ria101.wordpress.com/2010/02/22/cassandra-randompartitioner-vs-orderpreservingpartitioner/
+Well, first of all there is a really simple if brutal solution: simply store your index inside a single column family row as a series of columns. Since Cassandra can in principle cope with millions of columns, this is perfectly possible. Although it is true each index won’t be distributed across your whole cluster, the load will at the least be distributed across the nodes holding the replicas. If you use a typical replication factor (RF) of 3 the load associated with each index will be shared by 3 nodes etc.
+
+In the vast majority of cases, this will be enough, and it will be sufficient that the rest of your data is properly balanced across your cluster.
+
+But, I hear you saying, this is too brutal. Your index is too massive to fit on 3 nodes, is extremely hot and this just won’t work. You moved to Cassandra because you want your load distributed across your entire cluster. Period.
+
+This is a perfectly reasonably point of view.
+
+Names {
+  AAAA
+
+
+  ZZZZ
+}
+
+A {
+   AAAA: "Alpha Awesome Aardark Animal"
+   ABAA: ""
+   ABXA: ""
+   ACCC: ""
+   ...
+}
+
+...
+G {
+  GOOG: "Google"
+  GOGO: ""
+  ...
+}
+
 Example partial query
 from: GOA 
 GO

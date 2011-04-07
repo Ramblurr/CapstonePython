@@ -39,6 +39,7 @@ class CassandraBase(object):
             print "connecting to %s" %(host)
         self.STOCKS = pycassa.ColumnFamily(self.pool, "Stocks")
         self.STOCKS2 = pycassa.ColumnFamily(self.pool, "Stocks2")
+        self.SYMBOLS = pycassa.ColumnFamily(self.pool, "StockSymbols")
 
     def insert(self, record):
         id = uuid.uuid1()
@@ -65,6 +66,7 @@ class CassandraBase(object):
             #del rec['date']
             b.insert(symbol, {date: rec})
             b.insert(date, {symbol: rec})
+            self.SYMBOLS.insert(symbol[0], {symbol:''})
             if i % 1000 == 0:
                 print rec
             i += 1
