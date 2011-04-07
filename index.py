@@ -147,7 +147,9 @@ class index:
 		
 	for t in records_processed:
                 label = (self.getMonth(t['date'].month ), t['date'].year)
-		current = x_labels[len(x_labels)-1]
+		temp = len(x_labels)
+		temp = temp -1
+		current = x_labels[temp]
 		if current[0] != label[0]:
 			x_labels.append( label)
 #                if not label in x_labels:
