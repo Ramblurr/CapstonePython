@@ -20,7 +20,7 @@ class CassandraBase(object):
 	return result
 
     def get_by_sym_range2(self, sym, start, end):
-        result = pycassa.STOCKS2.get(symbol, column_start=start, column_end=end)
+        result = self.STOCKS2.get(symbol, column_start=start, column_end=end)
         return result
 
     def get_symbols_by_partial(self, sym_partial):
