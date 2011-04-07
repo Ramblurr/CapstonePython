@@ -91,12 +91,22 @@ class index:
         elapsed_time = (time.time() - start_time)
 
 	y_max = 0.0
+	y_min = 0.0
 	data = []
 	for q in records_processed:
 	    temp = float(q['price_adj_close'])
             data.append(temp)
 	    if temp > y_max:
 		y_max = temp
+		y_min = temp
+
+	for q in records_processed:
+	    temp = float(q['price_adj_close'])
+	    if temp > y_max:
+		y_min = temp
+		
+	difference = y_max - y_min
+	difference = difference/2
 		
 	chart = SimpleLineChart(1000, 300, y_range=[0, y_max])
 	
@@ -105,8 +115,8 @@ class index:
 #	chart.fill_linear_stripes(Chart.CHART, 0, 'CCCCCC', 0.1, 'FFFFFF', 0.2)
 	chart.set_grid(0, 25, 5, 5)
 
-	y_max_output = y_max + 1
-	left_axis = range(0, y_max_output+1, 1.00)
+#	y_max_output = y_max + 1
+	left_axis = range(y_min-difference, y_max_output+difference, 1.00)
 	left_axis[0] = ''
 
 	x_labels = []
