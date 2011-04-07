@@ -120,8 +120,8 @@ class index:
 	chart.set_grid(0, 25, 5, 5)
 
 	y_max_output = y_max + difference
-	left_axis = range(0, 10.00, 1.00)
-	left_axis[0] = y_min_foo
+	left_axis = range(y_min_foo, y_max_foo, 1.00)
+#	left_axis[0] = ''
 
 	x_labels = []
 		
