@@ -133,7 +133,8 @@ class index:
 	    y_min_foo = y_min_foo + 1.00
 
 	left_axis.append(y_min_foo)
-	chart.set_grid(0, len(left_axis), 1, 1)
+	lines = len(left-axis)-1
+	chart.set_grid(0, lines, 1, 1)
 	left_axis[0] = len(left_axis)	
 
 	x_labels = []
