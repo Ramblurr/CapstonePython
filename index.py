@@ -141,15 +141,17 @@ class index:
 	    left_axis.append(y_min_foo)
 	
 	lines = len(left_axis)-1
-	chart.set_grid(0, lines, 1, 1)
-	left_axis[0] = lines	
+	chart.set_grid(0, lines, 1, 1)	
 
 	x_labels = []
 		
 	for t in records_processed:
                 label = (self.getMonth(t['date'].month ), t['date'].year)
-                if not label in x_labels:
-                    x_labels.append( label )
+		current = x_labels[len(x_labels)-1]
+		if current[0] != label[0]:
+			x_labels.append( label)
+#                if not label in x_labels:
+#                    x_labels.append( label )
 			
 	chart.set_axis_labels(Axis.LEFT, left_axis)
 	chart.set_axis_labels(Axis.BOTTOM, x_labels)
