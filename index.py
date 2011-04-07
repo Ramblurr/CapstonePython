@@ -45,21 +45,21 @@ class index:
     def GET(self):
         return render.index("hi")
 
-    def getMonth(x):
+    def getMonth(self, x):
         return {
-            '1': "Jan",        
-	    '2': "Feb",
-            '3': "Mar",
-            '4': "Apr",
-            '5': "May",
-            '6': "Jun",
-            '7': "Jul",
-            '8': "Aug",
-            '9': "Sep",
-            '10': "Oct",
-            '11': "Nov",
-            '12': "Dec",
-        }[x]
+            1: "Jan",        
+	    2: "Feb",
+            3: "Mar",
+            4: "Apr",
+            5: "May",
+            6: "Jun",
+            7: "Jul",
+            8: "Aug",
+            9: "Sep",
+            10: "Oct",
+            11: "Nov",
+            12: "Dec",
+        }.get(x, "ERROR")
 
 
     def POST(self):
@@ -91,33 +91,64 @@ class index:
         elapsed_time = (time.time() - start_time)
 
 	y_max = 0.0
+	y_min = 0.0
 	data = []
 	for q in records_processed:
-            data.append(q['price_adj_close'])
-	    if q['price_adj_close'] > y_max:
-	        y_max = q['price_adj_close']
+	    temp = float(q['price_adj_close'])
+            data.append(temp)
+	    if temp > y_max:
+		y_max = temp
+
+	y_min = y_max
+
+	for d in records_processed:
+	    temp = float(d['price_adj_close'])
+	    if temp <  y_min:
+		y_min = temp
 		
-	chart = SimpleLineChart(400, 400, y_range=[0, y_max])
+	difference = float(y_max - y_min)
+	difference = float(difference/2)
+	
+	y_min_foo = y_min-difference
+	y_max_foo = y_max+difference
+	
+	if y_min_foo < 0:
+	    y_min_foo = 0
+	
+	chart = SimpleLineChart(1000, 300, y_range=[y_min_foo, y_max_foo])
 	
 	chart.add_data(data)
 	chart.set_colours(['0000FF'])
-	chart.fill_linear_stripes(Chart.CHART, 0, 'CCCCCC', 0.2, 'FFFFFF', 0.2)
-	chart.set_grid(0, 25, 5, 5)
+#	chart.fill_linear_stripes(Chart.CHART, 0, 'CCCCCC', 0.1, 'FFFFFF', 0.2)
+#	chart.set_grid(0, 25, 5, 5)
 
-	y_max_double = float(y_max)
-	left_axis = range(0, y_max_double + 1, 25)
-	left_axis[0] = ''
-	chart.set_axis_labels(Axis.LEFT, left_axis)
+#	y_max_output = y_max + difference
+#	left_axis = range(y_min_foo, y_max_foo, 1.00)
+#	left_axis[0] = y_min
+
+	left_axis = []
+	label = y_min_foo
+	while y_min_foo < y_max_foo:
+	    left_axis.append(y_min_foo)
+	    y_min_foo = y_min_foo + 1.00
+
+	left_axis.append(y_min_foo)
+	chart.set_grid(0, len(left_axis), 1, 1)
+	left_axis[0] = len(left_axis)	
 
 	x_labels = []
 		
-	for t in records_processed:	
-		x_labels.append( (getMonth(t['date'].month ), t['date'].year))
+	for t in records_processed:
+                label = (self.getMonth(t['date'].month ), t['date'].year)
+                if not label in x_labels:
+                    x_labels.append( label )
 			
-	x_labels = set(x_labels)
 	chart.set_axis_labels(Axis.LEFT, left_axis)
 	chart.set_axis_labels(Axis.BOTTOM, x_labels)
-
+	list_len = float(len(x_labels))
+	top = float(1)
+	stripe_len = float(top /list_len) 
+	chart.fill_linear_stripes(Chart.CHART, 0, 'CCCCCC', stripe_len, 'FFFFFF', stripe_len)
 	imgURL = chart.get_url()	
 
         return render.results(sym, records_processed, elapsed_time, imgURL)
