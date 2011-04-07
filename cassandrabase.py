@@ -31,7 +31,7 @@ class CassandraBase(object):
         before = partial + "A"
         after = partial + "Z"
         result = self.SYMBOLS.get(key, column_start=before, column_finish=after)
-        return result
+        return result.keys()
 
     def connect(self, host=None):
         if host is None:
