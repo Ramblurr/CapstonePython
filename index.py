@@ -112,7 +112,7 @@ class index:
 	y_min_foo = y_min-difference
 	y_max_foo = y_max+difference
 	
-	if y_min_foo < 0
+	if y_min_foo < 0:
 	    y_min_foo = 0
 	
 	chart = SimpleLineChart(1000, 300, y_range=[y_min_foo, y_max_foo])
