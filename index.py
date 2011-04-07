@@ -128,12 +128,11 @@ class index:
 
 	left_axis = []
 	label = y_min_foo
-	counter = 0
 	while y_min_foo < y_max_foo:
-	    left_axis[counter] = y_min_foo
+	    left_axis.append(y_min_foo)
 	    y_min_foo = y_min_foo + 1.00
 
-	label[counter] = y_min_foo
+	label.append(y_min_foo)
 
 	x_labels = []
 		
