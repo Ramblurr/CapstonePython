@@ -116,7 +116,7 @@ class index:
 	chart.set_grid(0, 25, 5, 5)
 
 #	y_max_output = y_max + 1
-	left_axis = range(y_min-difference, y_max_output+difference, 1.00)
+	left_axis = range(y_min-difference, y_max+difference, 1.00)
 	left_axis[0] = ''
 
 	x_labels = []
