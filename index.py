@@ -131,7 +131,7 @@ class index:
 	delta_y = 1.00
 	derp = float(y_max_foo - y_min_foo)
 #	if derp > 15.0:
-	    delta_y = derp/(10.00)
+	delta_y = derp/(10.00)
 
 	while y_min_foo < y_max_foo:
 	    left_axis.append(y_min_foo)
