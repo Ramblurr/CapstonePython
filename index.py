@@ -120,7 +120,7 @@ class index:
 
 	y_max_output = y_max + difference
 	left_axis = range(0, 10.00, 1.00)
-	left_axis[0] = ''
+	left_axis[0] = y_min
 
 	x_labels = []
 		
