@@ -33,6 +33,7 @@ class CassandraBase(object):
             self.pool = pycassa.connect(self.config.keyspace, [host])
             print "connecting to %s" %(host)
         self.STOCKS = pycassa.ColumnFamily(self.pool, "Stocks")
+        self.STOCKS2 = pycassa.ColumnFamily(self.pool, "Stocks2")
 
     def insert(self, record):
         id = uuid.uuid1()
@@ -46,6 +47,19 @@ class CassandraBase(object):
             rec['date'] = int(d)
             id = uuid.uuid1()
             b.insert(str(id), rec)
+            if i % 1000 == 0:
+                print rec
+            i += 1
+    def insert_batch2(self, parser):
+        b = self.STOCKS2.batch(queue_size=1000)
+        i = 0
+        for rec in parser:
+            symbol = rec['symbol']
+            date = rec['date']
+            #del rec['symbol']
+            #del rec['date']
+            b.insert(symbol, {date: rec})
+            b.insert(date, {symbol: rec})
             if i % 1000 == 0:
                 print rec
             i += 1

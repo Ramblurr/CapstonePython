@@ -20,6 +20,7 @@ def test_cassandra():
     print "Connecting..."
     cass = cassandrabase.CassandraBase()
     cass.test()
+
 def test_insert():
     cass = cassandrabase.CassandraBase()
     cass.connect()
@@ -27,6 +28,14 @@ def test_insert():
     data_path = config.data_path
     p = parser.Parser(data_path)
     cass.insert_batch(p)
+
+def test_insert2():
+    cass = cassandrabase.CassandraBase()
+    cass.connect()
+    config = settings.Settings()
+    data_path = config.data_path
+    p = parser.Parser(data_path)
+    cass.insert_batch2(p)
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
