@@ -72,8 +72,8 @@ class index:
 
 
         date_format = "%m/%d/%Y"
-        start = int(datetime.strptime(start_string, date_format).strftime("%Y-%m-%d"))
-        end = int(datetime.strptime(end_string, date_format).strftime("%Y-%m-%d"))
+        start = datetime.strptime(start_string, date_format).strftime("%Y-%m-%d")
+        end = datetime.strptime(end_string, date_format).strftime("%Y-%m-%d")
 
         cass = cassandrabase.CassandraBase()
         cass.connect(get_seed())
