@@ -103,12 +103,11 @@ class index:
 	chart.add_data(data)
 	chart.set_colours(['0000FF'])
 	chart.fill_linear_stripes(Chart.CHART, 0, 'CCCCCC', 0.2, 'FFFFFF', 0.2)
-	chart.set_grid(0, 25, 5, 5)
+#	chart.set_grid(0, 25, 5, 5)
 
 	y_max_output = y_max + 1
 	left_axis = range(0, y_max_output, 25)
 	left_axis[0] = ''
-	chart.set_axis_labels(Axis.LEFT, left_axis)
 
 	x_labels = []
 		
@@ -120,7 +119,7 @@ class index:
 			
 	chart.set_axis_labels(Axis.LEFT, left_axis)
 	chart.set_axis_labels(Axis.BOTTOM, x_labels)
-
+	char.setgrid(0, x_labels.len()*5, 5, 5) 
 	imgURL = chart.get_url()	
 
         return render.results(sym, records_processed, elapsed_time, imgURL)
