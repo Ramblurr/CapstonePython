@@ -102,8 +102,8 @@ class index:
 	
 	chart.add_data(data)
 	chart.set_colours(['0000FF'])
-	chart.fill_linear_stripes(Chart.CHART, 0, 'CCCCCC', 0.2, 'FFFFFF', 0.2)
-#	chart.set_grid(0, 25, 5, 5)
+#	chart.fill_linear_stripes(Chart.CHART, 0, 'CCCCCC', 0.2, 'FFFFFF', 0.2)
+	chart.set_grid(0, 25, 5, 5)
 
 	y_max_output = y_max + 1
 	left_axis = range(0, y_max_output, 25)
@@ -119,7 +119,8 @@ class index:
 			
 	chart.set_axis_labels(Axis.LEFT, left_axis)
 	chart.set_axis_labels(Axis.BOTTOM, x_labels)
-	chart.set_grid(0, len(x_labels)*5, 5, 5) 
+	stripe_len = 1/(len(x_labels)) 
+	chart.fill_linear_stripes(Chart.CHART, 0, 'CCCCCC', stripe_len, 'FFFFFF', stripe_len)
 	imgURL = chart.get_url()	
 
         return render.results(sym, records_processed, elapsed_time, imgURL)
