@@ -128,9 +128,13 @@ class index:
 
 	left_axis = []
 	label = y_min_foo
+	delta_y = 1.00
+	if (y_max_foo-y_min_foo) > 15.0
+	    delta_y = (y_max_foo - y_min_foo)/(10.00)
+
 	while y_min_foo < y_max_foo:
 	    left_axis.append(y_min_foo)
-	    y_min_foo = y_min_foo + 1.00
+	    y_min_foo = y_min_foo + delta_y
 
 	left_axis.append(y_min_foo)
 	lines = len(left_axis)-1
