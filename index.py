@@ -120,7 +120,7 @@ class index:
 	chart.add_data(data)
 	chart.set_colours(['0000FF'])
 #	chart.fill_linear_stripes(Chart.CHART, 0, 'CCCCCC', 0.1, 'FFFFFF', 0.2)
-	chart.set_grid(0, 25, 5, 5)
+#	chart.set_grid(0, 25, 5, 5)
 
 #	y_max_output = y_max + difference
 #	left_axis = range(y_min_foo, y_max_foo, 1.00)
@@ -133,6 +133,7 @@ class index:
 	    y_min_foo = y_min_foo + 1.00
 
 	left_axis.append(y_min_foo)
+	chart.set_grid(0, len(left_axis)*5, 5, 5)
 
 	x_labels = []
 		
