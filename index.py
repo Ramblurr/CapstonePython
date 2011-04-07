@@ -43,7 +43,7 @@ class seed:
         set_seed(ip_address)
 
 class symbol:
-    web.autodelegate('GET_')
+    GET = web.autodelegate('GET_')
     def GET_search(self):
         print "Symbols"
     def GET_search(self, args):
