@@ -12,6 +12,7 @@ from pygooglechart import Axis
 
 urls = ( '/', 'index',
          '/results', 'results',
+         '/symbol/(.*)', 'symbol',
          '/seed', 'seed',
          '/res/(.*)', 'static')
 render = web.template.render('resources/')
@@ -41,6 +42,12 @@ class seed:
         ip_address = web.input()['ip']
         set_seed(ip_address)
 
+class symbol:
+    autodelegate('GET_')
+    def GET_search(self):
+        print "Symbols"
+    def GET_search(self, args):
+        print args
 class index:
     def GET(self):
         return render.index("hi")
