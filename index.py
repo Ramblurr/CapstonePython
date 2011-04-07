@@ -134,6 +134,7 @@ class index:
 
 	left_axis.append(y_min_foo)
 	chart.set_grid(0, len(left_axis), 1, 1)
+	left_axis[0] = len(left_axis)	
 
 	x_labels = []
 		
