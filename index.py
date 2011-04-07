@@ -72,19 +72,19 @@ class index:
 
 
         date_format = "%m/%d/%Y"
-        start = int(datetime.strptime(start_string, date_format).strftime("%Y%m%d"))
-        end = int(datetime.strptime(end_string, date_format).strftime("%Y%m%d"))
+        start = int(datetime.strptime(start_string, date_format).strftime("%Y-%m-%d"))
+        end = int(datetime.strptime(end_string, date_format).strftime("%Y-%m-%d"))
 
         cass = cassandrabase.CassandraBase()
         cass.connect(get_seed())
 
         start_time = time.time()
-        records = cass.get_by_sym_range(sym, start, end)
+        records = cass.get_by_sym_range2(sym, start, end)
 
         records_unsorted = []
         for r in records:
 	    temp = r[1]
-            temp['date'] = datetime.strptime(str(temp['date']), "%Y%m%d")
+            temp['date'] = datetime.strptime(str(temp['date']), "%Y-%m-%d")
             records_unsorted.append(temp)
             
 	records_processed = sorted(records_unsorted, key = lambda k: k['date'])

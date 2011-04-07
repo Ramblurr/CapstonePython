@@ -21,7 +21,8 @@ class CassandraBase(object):
 
     def get_by_sym_range2(self, sym, start, end):
         result = self.STOCKS2.get(sym, column_start=start, column_finish=end)
-        return result
+
+        return result.items()
 
     def get_symbols_by_partial(self, sym_partial):
         sym_expr = pycassa.create_index_expression("symbol", sym_partial, GTE)
