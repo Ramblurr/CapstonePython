@@ -98,7 +98,8 @@ class index:
             data.append(temp)
 	    if temp > y_max:
 		y_max = temp
-		y_min = temp
+
+	y_min = y_max
 
 	for q in records_processed:
 	    temp = float(q['price_adj_close'])
