@@ -119,8 +119,9 @@ class index:
 			
 	chart.set_axis_labels(Axis.LEFT, left_axis)
 	chart.set_axis_labels(Axis.BOTTOM, x_labels)
-	list_len = len(x_labels)
-	stripe_len = float(1 /(list_len)) 
+	list_len = float(len(x_labels))
+	top = float(1)
+	stripe_len = float(top /list_len) 
 	chart.fill_linear_stripes(Chart.CHART, 0, 'CCCCCC', stripe_len, 'FFFFFF', stripe_len)
 	imgURL = chart.get_url()	
 
