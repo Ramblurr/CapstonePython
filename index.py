@@ -119,7 +119,7 @@ class index:
 			
 	chart.set_axis_labels(Axis.LEFT, left_axis)
 	chart.set_axis_labels(Axis.BOTTOM, x_labels)
-	char.setgrid(0, x_labels.len()*5, 5, 5) 
+	chart.setgrid(0, x_labels.len()*5, 5, 5) 
 	imgURL = chart.get_url()	
 
         return render.results(sym, records_processed, elapsed_time, imgURL)
