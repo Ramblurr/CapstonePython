@@ -47,5 +47,7 @@ if __name__ == "__main__":
         test_nasdaq()
     elif sys.argv[1] == "insert":
         test_insert()
+    elif sys.argv[1] == "insert2":
+        test_insert2()
     else:
         print "usage: test.py cassandra|nasdaq|insert"
