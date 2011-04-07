@@ -145,13 +145,12 @@ class index:
 
 	x_labels = []
 		
+	last = -1;
 	for t in records_processed:
                 label = (self.getMonth(t['date'].month ), t['date'].year)
-		temp = len(x_labels)
-		temp = temp -1
-		current = x_labels[temp]
-		if current[0] != label[0]:
+		if last != self.getMonth(t['date'].month):
 			x_labels.append( label)
+		last = self.getMonth(t['date'])
 #                if not label in x_labels:
 #                    x_labels.append( label )
 			
