@@ -108,7 +108,7 @@ class index:
 	difference = y_max - y_min
 	difference = difference/2
 		
-	chart = SimpleLineChart(1000, 300, y_range=[0, y_max])
+	chart = SimpleLineChart(1000, 300, y_range=[y_min-difference, y_max+difference])
 	
 	chart.add_data(data)
 	chart.set_colours(['0000FF'])
@@ -116,7 +116,7 @@ class index:
 	chart.set_grid(0, 25, 5, 5)
 
 	y_max_output = y_max + difference
-	left_axis = range(0, y_max_output, 1.00)
+	left_axis = range(y_min-difference, y_max_output+1, 1.00)
 	left_axis[0] = ''
 
 	x_labels = []
