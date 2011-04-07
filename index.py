@@ -102,7 +102,7 @@ class index:
 	
 	chart.add_data(data)
 	chart.set_colours(['0000FF'])
-	chart.fill_linear_stripes(Chart.CHART, 0, 'CCCCCC', 0.1, 'FFFFFF', 0.1)
+	chart.fill_linear_stripes(Chart.CHART, 0, 'CCCCCC', 0.1, 'FFFFFF', 0.2)
 	chart.set_grid(0, 25, 5, 5)
 
 	y_max_output = y_max + 1
