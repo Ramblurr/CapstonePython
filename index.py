@@ -130,7 +130,7 @@ class index:
 	label = y_min_foo
 	delta_y = 1.00
 	derp = float(y_max_foo - y_min_foo)
-	if derp > 15.0:
+#	if derp > 15.0:
 	    delta_y = derp/(10.00)
 
 	while y_min_foo < y_max_foo:
@@ -139,7 +139,7 @@ class index:
 
 	left_axis.append(y_min_foo)
 	lines = len(left_axis)-1
-	chart.set_grid(0, left_axis[1], 1, 1)
+	chart.set_grid(0, 9, 1, 1)
 	left_axis[0] = delta_y	
 
 	x_labels = []
