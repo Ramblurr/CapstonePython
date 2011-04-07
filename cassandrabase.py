@@ -19,6 +19,10 @@ class CassandraBase(object):
         result = self.STOCKS.get_indexed_slices(clause)
 	return result
 
+    def get_by_sym_range2(self, sym, start, end):
+        result = pycassa.get(symbol, column_start=start, column_end=end)
+        return result
+
     def get_symbols_by_partial(self, sym_partial):
         sym_expr = pycassa.create_index_expression("symbol", sym_partial, GTE)
         clause = pycassa.create_index_clause([sym_expr])
