@@ -108,7 +108,7 @@ class index:
 	difference = float(y_max - y_min)
 	difference = float(difference/2)
 	
-	y_min_foo = y_min-difference
+	y_min_foo = y_min
 	y_max_foo = y_max+difference
 		
 	chart = SimpleLineChart(1000, 300, y_range=[y_min_foo, y_max_foo])
