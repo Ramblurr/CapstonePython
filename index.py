@@ -132,7 +132,7 @@ class index:
 	    left_axis.append(y_min_foo)
 	    y_min_foo = y_min_foo + 1.00
 
-	label.append(y_min_foo)
+	left_axis.append(y_min_foo)
 
 	x_labels = []
 		
