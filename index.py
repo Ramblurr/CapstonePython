@@ -117,7 +117,7 @@ class index:
 
 #	y_max_output = y_max + 1
 	left_axis = range(y_min-difference, y_max+difference, 1.00)
-	left_axis[0] = ''
+#	left_axis[0] = ''
 
 	x_labels = []
 		
