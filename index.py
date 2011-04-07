@@ -101,9 +101,9 @@ class index:
 
 	y_min = y_max
 
-	for q in records_processed:
-	    temp = float(q['price_adj_close'])
-	    if temp <  y_max:
+	for d in records_processed:
+	    temp = float(d['price_adj_close'])
+	    if temp <  y_min:
 		y_min = temp
 		
 	difference = float(y_max - y_min)
