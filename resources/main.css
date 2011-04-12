@@ -127,6 +127,7 @@ p, input, textarea {
 #form1 legend{display:none;}
 #form1 p{margin:.5em 0;}
 #form1 label{display:block;}
+#form1 label.error {display:inline; color: red;}
 #form1 input, #form1 textarea{
         width:252px;
         border:1px solid #ddd;

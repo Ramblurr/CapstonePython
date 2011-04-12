@@ -20,6 +20,8 @@ $def with (name)
         $$( "#symbol" ).autocomplete({
             source: "/symbol/search/",
         });
+        $$( "#enddate" ).datepicker({ changeMonth: true, changeYear: true, dateFormat: 'yy-mm-dd'});
+        $$( "#startdate" ).datepicker({ changeMonth: true, changeYear: true, dateFormat: 'yy-mm-dd'});
         $$("#form1").validate({
             rules: {
                 symbol: {
@@ -32,8 +34,12 @@ $def with (name)
                                 $$.getJSON("/symbol/daterange/",{ "term": $$("#symbol").val() }, function(json) {
                                     $$( "#startdate" ).removeAttr('disabled');
                                     $$( "#enddate" ).removeAttr('disabled');
-                                    $$( "#enddate" ).datepicker({ dateFormat: 'mm/dd/yy', defaultDate: json['min'], minDate: json['min'], maxDate: json['max'] });
-                                    $$( "#startdate" ).datepicker({ dateFormat: 'mm/dd/yy', defaultDate: json['min'], minDate: json['min'], maxDate: json['max'] });
+                                    $$( "#enddate" ).datepicker("option", "defaultDate",json['max']);
+                                    $$( "#enddate" ).datepicker("option", "minDate",json['min']);
+                                    $$( "#enddate" ).datepicker("option", "maxDate",json['max']);
+                                    $$( "#startdate" ).datepicker("option", "defaultDate",json['min']);
+                                    $$( "#startdate" ).datepicker("option", "minDate",json['min']);
+                                    $$( "#startdate" ).datepicker("option", "maxDate",json['max']);
                                 });
                             } else {
                                 $$( "#startdate" ).attr('disabled', 'disabled');
@@ -66,7 +72,7 @@ $def with (name)
 <h1> Stocks Demo </h1>
 </div>
 <div class="form">
-<p> This is just a placeholder form.. we need to come up with what sort of form inputs we want to use.</p>
+<p>Enter the stock symbol and dater range you would like to query the database for.</p>
     <form id="form1" action="/" method="post">
 
         <fieldset><legend>Symbol Lookup</legend>

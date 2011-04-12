@@ -25,9 +25,9 @@ class CassandraBase(object):
         try:
             result = self.STOCKS2.get(sym, column_count=14700)
 	    total_dates = result.keys()
-	    range = []
-	    range.append(total_dates[0])
-	    range.append(total_dates[len(total_dates)-1])
+	    range = {}
+	    range['min'] = total_dates[0]
+	    range['max'] = total_dates[len(total_dates)-1]
             return range
         except pycassa.cassandra.ttypes.NotFoundException:
             return []
