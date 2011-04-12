@@ -13,7 +13,7 @@ class CassandraBase(object):
 
     def sym_exists(self, sym):
 	try:
-            sym = sym.upper.strip()
+            sym = sym.upper().strip()
 	    results = self.SYMBOLS.get(sym)
 	    return True
 	except pycassa.cassandra.ttypes.NotFoundException:
