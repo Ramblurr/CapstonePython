@@ -10,16 +10,24 @@ $def with (name)
 
   <!-- Reference jQuery and jQuery UI from the CDN. Remember
        that the order of these two elements is important -->
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js"></script>
+  <script src="/res/jquery.validate.min.js"></script>
 
   <!-- Initialize the tabs when the document is ready -->
   <script type="text/javascript">
     $$(document).ready(function() {
-       $$( "#enddate" ).datepicker();
-    $$( "#startdate" ).datepicker();
-    $$( "#symbol" ).autocomplete({
-        source: "/symbol/search/",
+        $$( "#enddate" ).datepicker();
+        $$( "#startdate" ).datepicker();
+        $$( "#symbol" ).autocomplete({
+            source: "/symbol/search/",
+        });
+        $$("#form1").validate({
+            rules: {
+                symbol: "required",
+                startdate: "required",
+                enddate: "required"
+            }
         });
     });
   </script>
