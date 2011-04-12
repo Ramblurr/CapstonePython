@@ -14,9 +14,9 @@ class CassandraBase(object):
     def sym_exists(self, sym):
 	try:
 	    results=self.SYMBOLS.get(sym)
-	    return 'true'
+	    return True
 	except pycassa.cassandra.ttypes.NotFoundException:
-	    return 'false'
+	    return False
 
     def get_by_sym_range(self, sym, start, end):
         sym_expr = pycassa.create_index_expression("symbol", sym)

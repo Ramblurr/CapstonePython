@@ -44,8 +44,20 @@ class seed:
 
 class symbol:
     GET = web.autodelegate('GET_')
+
+    def GET_exists(self):
+        qs = urlparse.parse_qs(web.ctx.query[1:])
+        if 'value' not in qs:
+            return "Error"
+        term = qs['value'][0]
+        cass = cassandrabase.CassandraBase()
+        cass.connect(get_seed())
+        results = cass.sym_exists(term)
+        return json.dumps(results)
+
     def GET_search(self):
         return "Symbols"
+
     def GET_search(self, args):
         qs = urlparse.parse_qs(web.ctx.query[1:])
         if 'term' not in qs:
