@@ -15,7 +15,8 @@ class CassandraBase(object):
 	try:
             sym = sym.upper().strip()
             print "sym exists: " + sym
-	    results = self.SYMBOLS.get(sym)
+            key = sym[0]
+	    results = self.SYMBOLS.get(key, columns=[sym])
 	    return True
 	except pycassa.cassandra.ttypes.NotFoundException:
 	    return False
