@@ -24,7 +24,11 @@ class CassandraBase(object):
     def get_date_range_by_sym(self, sym):
         try:
             result = self.STOCKS2.get(sym, column_count=14700)
-            return result.keys()
+	    total_dates = result.keys()
+	    range = []
+	    range.append(total_dates[0])
+	    range.append(total_dates[len(total_dates)-1])
+            return range
         except pycassa.cassandra.ttypes.NotFoundException:
             return []
 
