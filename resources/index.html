@@ -33,10 +33,10 @@ $def with (name)
                 enddate: "required"
             },
             messages: {
-                username: {
-                    required: "Enter a username",
+                symbol: {
+                    required: "Enter a stock symbol",
                     minlength: jQuery.format("Enter at least {0} characters"),
-                    remote: jQuery.format("{0} is already in use")
+                    remote: jQuery.format("{0} does not exist")
                 }
             }
         });
