@@ -56,9 +56,6 @@ class symbol:
         results = cass.sym_exists(term)
         return json.dumps(results)
 
-    def GET_search(self):
-        return "Symbols"
-
     def GET_search(self, args):
         qs = urlparse.parse_qs(web.ctx.query[1:])
         if 'term' not in qs:
@@ -118,7 +115,9 @@ class index:
 
         start_time = time.time()
         records = cass.get_by_sym_range2(sym, start, end)
-
+        if len(records) == 0:
+            message = "Zero records returned. Perhaps the date range is incorrect?"
+            return render.error(message)
         records_unsorted = []
         print "number records: %s" %(len(records))
         for r in records:

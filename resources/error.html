@@ -1,0 +1,38 @@
+$def with (message)
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>NoSQL - Stocks Demo</title>
+
+<link rel="stylesheet" href="/res/main.css" type="text/css" />
+<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/smoothness/jquery-ui.css" type="text/css" rel="Stylesheet" />
+
+  <!-- Reference jQuery and jQuery UI from the CDN. Remember
+       that the order of these two elements is important -->
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js"></script>
+
+  <!-- Initialize the tabs when the document is ready -->
+  <script type="text/javascript">
+    $$(document).ready(function() {
+       $$( "#enddate" ).datepicker();
+    $$( "#startdate" ).datepicker();
+    });
+  </script>
+
+<link href='http://fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+
+</head>
+
+<body>
+<div id="content">
+<div id="header">
+<h1> Stocks Demo </h1>
+</div>
+<h2>Error</h2>
+<p>$message</p>
+</div>
+
+</body>
