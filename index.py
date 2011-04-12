@@ -56,9 +56,6 @@ class symbol:
         results = cass.sym_exists(term)
         return json.dumps(results)
 
-    def GET_search(self):
-        return "Symbols"
-
     def GET_search(self, args):
         qs = urlparse.parse_qs(web.ctx.query[1:])
         if 'term' not in qs:
