@@ -76,7 +76,7 @@ class symbol:
 	term = qs['term'][0]
 	cass = cassandrabase.CassandraBase()
 	cass.connect(get_seed())
-	results = cass.get_daterange_by_sym(term)
+	results = cass.get_date_range_by_sym(term)
 	return json.dumps(results)
 
 class index:
