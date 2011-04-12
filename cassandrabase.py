@@ -18,7 +18,7 @@ class CassandraBase(object):
 	except pycassa.cassandra.ttypes.NotFoundException:
 	    return False
 
-    def get_date_range_by_sym(self, sym)
+    def get_date_range_by_sym(self, sym):
         results=self.SYMBOLS.get(sym)
 	return result
 
