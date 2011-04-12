@@ -46,7 +46,7 @@ class seed:
 class symbol:
     GET = web.autodelegate('GET_')
 
-    def GET_exists(self):
+    def GET_exists(self, args):
         qs = urlparse.parse_qs(web.ctx.query[1:])
         print "sym exists: " + qs
         if 'value' not in qs:
