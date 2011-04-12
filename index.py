@@ -120,8 +120,8 @@ class index:
         records = cass.get_by_sym_range2(sym, start, end)
 
         records_unsorted = []
+        print "number records: " + len(records)
         for r in records:
-            print r
 	    temp = r[1]
             temp['date'] = datetime.strptime(str(temp['date']), "%Y-%m-%d")
             records_unsorted.append(temp)
