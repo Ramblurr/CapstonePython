@@ -26,7 +26,7 @@ $def with (name)
             rules: {
                 symbol: {
                     required: true,
-                    minlength: 4,
+//                     minlength: 4,
                     remote: "/symbol/exists"
                 },
                 startdate: "required",
@@ -35,7 +35,7 @@ $def with (name)
             messages: {
                 symbol: {
                     required: "Enter a stock symbol",
-                    minlength: jQuery.format("Enter at least {0} characters"),
+//                     minlength: jQuery.format("Enter at least {0} characters"),
                     remote: jQuery.format("{0} does not exist")
                 }
             }
