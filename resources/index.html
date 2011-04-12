@@ -17,8 +17,6 @@ $def with (name)
   <!-- Initialize the tabs when the document is ready -->
   <script type="text/javascript">
     $$(document).ready(function() {
-        $$( "#enddate" ).datepicker();
-        $$( "#startdate" ).datepicker();
         $$( "#symbol" ).autocomplete({
             source: "/symbol/search/",
         });
@@ -26,8 +24,21 @@ $def with (name)
             rules: {
                 symbol: {
                     required: true,
-//                     minlength: 4,
-                    remote: "/symbol/exists/"
+                    remote: {
+                        url: "/symbol/exists/" ,
+                        type: "get" ,
+                        complete: function(data){
+                            if( data.responseText == "true" ) {
+                                $$( "#startdate" ).removeAttr('disabled');
+                                $$( "#enddate" ).removeAttr('disabled');
+                                $$( "#enddate" ).datepicker({ dateFormat: 'mm/dd/yy', defaultDate: '05/05/2003', minDate: '05/05/2003', maxDate: '05/05/2004' });
+                                $$( "#startdate" ).datepicker({ dateFormat: 'mm/dd/yy', defaultDate: '05/05/2003', minDate: '05/05/2003', maxDate: '05/05/2004' });
+                            } else {
+                                $$( "#startdate" ).attr('disabled', 'disabled');
+                                $$( "#enddate" ).attr('disabled', 'disabled');
+                            }
+                        }
+                    }
                 },
                 startdate: "required",
                 enddate: "required"
@@ -35,7 +46,6 @@ $def with (name)
             messages: {
                 symbol: {
                     required: "Enter a stock symbol",
-//                     minlength: jQuery.format("Enter at least {0} characters"),
                     remote: jQuery.format("{0} does not exist")
                 }
             }
@@ -64,11 +74,11 @@ $def with (name)
                 </p>
                 <p>
                         <label for="startdate">Start Date</label>
-                        <input type="text" name="startdate" id="startdate" size="30" />
+                        <input disabled="disabled" type="text" name="startdate" id="startdate" size="30" />
                 </p>
                 <p>
                         <label for="enddate">End Date</label>
-                        <input type="text" name="enddate" id="enddate" size="30" />
+                        <input disabled="disabled" type="text" name="enddate" id="enddate" size="30" />
                 </p>
         </fieldset>
         <p class="submit"><button type="submit">Submit</button></p>
