@@ -82,12 +82,6 @@ But, I hear you saying, this is too brutal. Your index is too massive to fit on 
 
 This is a perfectly reasonably point of view.
 
-Names {
-  AAAA
-
-
-  ZZZZ
-}
 
 A {
    AAAA: "Alpha Awesome Aardark Animal"
@@ -110,3 +104,11 @@ GO
 GOOG
 GOGO
 to: GP
+
+partial: AM
+from: AMA
+to: AMZ
+
+partial: AA
+from: AAA
+to AAZ
