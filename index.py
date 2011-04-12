@@ -48,9 +48,9 @@ class symbol:
     def GET_exists(self, args):
         qs = urlparse.parse_qs(web.ctx.query[1:])
         print "sym exists: %s" %( web.ctx.query[1:])
-        if 'value' not in qs:
+        if 'symbol' not in qs:
             return "Error"
-        term = qs['value'][0]
+        term = qs['symbol'][0]
         cass = cassandrabase.CassandraBase()
         cass.connect(get_seed())
         results = cass.sym_exists(term)
