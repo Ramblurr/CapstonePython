@@ -11,6 +11,13 @@ class CassandraBase(object):
         sys = SystemManager(self.config.host)
         print sys.list_keyspaces()
 
+    def sym_exists(self, sym):
+	try:
+	    results=self.SYMBOLS.get(sym)
+	    return 'true'
+	except pycassa.cassandra.ttypes.NotFoundException:
+	    return 'false'
+
     def get_by_sym_range(self, sym, start, end):
         sym_expr = pycassa.create_index_expression("symbol", sym)
         start_expr = pycassa.create_index_expression("date", start, GTE)
