@@ -106,7 +106,7 @@ class index:
         end_string = form['enddate'].value
 
 
-        date_format = "%m/%d/%Y"
+        date_format = "%Y-%m-%d"
         start = datetime.strptime(start_string, date_format).strftime("%Y-%m-%d")
         end = datetime.strptime(end_string, date_format).strftime("%Y-%m-%d")
 
