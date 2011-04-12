@@ -22,24 +22,24 @@ $def with (name)
         $$( "#symbol" ).autocomplete({
             source: "/symbol/search/",
         });
-//         $$("#form1").validate({
-//             rules: {
-//                 symbol: {
-//                     required: true,
-// //                     minlength: 4,
-//                     remote: "/symbol/exists/"
-//                 },
-//                 startdate: "required",
-//                 enddate: "required"
-//             },
-//             messages: {
-//                 symbol: {
-//                     required: "Enter a stock symbol",
-// //                     minlength: jQuery.format("Enter at least {0} characters"),
-//                     remote: jQuery.format("{0} does not exist")
-//                 }
-//             }
-//         });
+        $$("#form1").validate({
+            rules: {
+                symbol: {
+                    required: true,
+//                     minlength: 4,
+                    remote: "/symbol/exists/"
+                },
+                startdate: "required",
+                enddate: "required"
+            },
+            messages: {
+                symbol: {
+                    required: "Enter a stock symbol",
+//                     minlength: jQuery.format("Enter at least {0} characters"),
+                    remote: jQuery.format("{0} does not exist")
+                }
+            }
+        });
     });
   </script>
 
