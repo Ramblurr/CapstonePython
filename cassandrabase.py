@@ -63,7 +63,6 @@ class CassandraBase(object):
         else:
             self.pool = pycassa.connect(self.config.keyspace, [host])
             print "connecting to %s" %(host)
-        self.STOCKS = pycassa.ColumnFamily(self.pool, "Stocks")
         self.STOCKS2 = pycassa.ColumnFamily(self.pool, "Stocks2")
         self.SYMBOLS = pycassa.ColumnFamily(self.pool, "StockSymbols")
 
