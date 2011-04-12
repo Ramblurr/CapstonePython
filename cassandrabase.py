@@ -31,7 +31,7 @@ class CassandraBase(object):
         end_expr = pycassa.create_index_expression("date", end, LTE)
         clause = pycassa.create_index_clause([sym_expr, start_expr, end_expr])
         result = self.STOCKS.get_indexed_slices(clause)
-	return result
+        return result
 
     def get_by_sym_range2(self, sym, start, end):
         print "get_by_sym_range2: start=%s, end=%s" %(start, end)
@@ -39,6 +39,7 @@ class CassandraBase(object):
             result = self.STOCKS2.get(sym, column_count=14700, column_start=start, column_finish=end)
             return result.items()
         except pycassa.cassandra.ttypes.NotFoundException:
+            return []
 
     def get_symbols_by_partial(self, sym_partial):
         partial = sym_partial.upper()
