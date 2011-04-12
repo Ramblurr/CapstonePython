@@ -22,8 +22,8 @@ class CassandraBase(object):
 	    return False
 
     def get_date_range_by_sym(self, sym):
-        result = self.STOCKS2.get(sym)
-	return result.keys()
+        results=self.STOCKS2.get(sym)
+	return result
 
     def get_by_sym_range(self, sym, start, end):
         sym_expr = pycassa.create_index_expression("symbol", sym)
@@ -34,6 +34,7 @@ class CassandraBase(object):
 	return result
 
     def get_by_sym_range2(self, sym, start, end):
+        print "get_by_sym_range2: start=%s, end=%s" %(start, end)
         result = self.STOCKS2.get(sym, column_start=start, column_finish=end)
 
         return result.items()

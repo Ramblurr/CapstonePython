@@ -121,6 +121,7 @@ class index:
 
         records_unsorted = []
         for r in records:
+            print r
 	    temp = r[1]
             temp['date'] = datetime.strptime(str(temp['date']), "%Y-%m-%d")
             records_unsorted.append(temp)
