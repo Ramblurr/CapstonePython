@@ -48,7 +48,7 @@ class symbol:
 
     def GET_exists(self, args):
         qs = urlparse.parse_qs(web.ctx.query[1:])
-        print "sym exists: " + qs
+        #print "sym exists: " + qs
         if 'value' not in qs:
             return "Error"
         term = qs['value'][0]
