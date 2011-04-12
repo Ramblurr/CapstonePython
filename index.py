@@ -13,7 +13,6 @@ from pygooglechart import Axis
 urls = ( '/', 'index',
          '/results', 'results',
          '/symbol/(.*)', 'symbol',
-	 '/daterange/(.*)', 'daterange',
          '/seed', 'seed',
          '/res/(.*)', 'static')
 render = web.template.render('resources/')
