@@ -24,9 +24,20 @@ $def with (name)
         });
         $$("#form1").validate({
             rules: {
-                symbol: "required",
+                symbol: "required" {
+                    required: true,
+                    minlength: 4,
+                    remote: "/symbol/exists"
+                },
                 startdate: "required",
                 enddate: "required"
+            },
+            messages: {
+                username: {
+                    required: "Enter a username",
+                    minlength: jQuery.format("Enter at least {0} characters"),
+                    remote: jQuery.format("{0} is already in use")
+                },
             }
         });
     });
