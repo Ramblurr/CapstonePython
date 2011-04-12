@@ -35,7 +35,7 @@ class CassandraBase(object):
 
     def get_by_sym_range2(self, sym, start, end):
         print "get_by_sym_range2: start=%s, end=%s" %(start, end)
-        result = self.STOCKS2.get(sym, column_start=start, column_finish=end)
+        result = self.STOCKS2.get(sym, column_count=None, column_start=start, column_finish=end)
 
         return result.items()
 
