@@ -1,12 +1,13 @@
 import settings
-import pycassa
+import pybase
 import uuid
 from pycassa.system_manager import *
 from pycassa.index import *
 
-class CassandraBase(object):
+class HbaseBase(object):
     def __init__(self):
-        self.config = settings.Settings().cassandra
+        self.config.host = "enter ip address here"
+	
     def test(self):
         sys = SystemManager(self.config.host)
         print sys.list_keyspaces()
