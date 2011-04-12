@@ -19,6 +19,10 @@ class CassandraBase(object):
 	except pycassa.cassandra.ttypes.NotFoundException:
 	    return False
 
+    def get_date_range_by_sym(self, sym)
+        results=self.SYMBOLS.get(sym)
+	return result
+
     def get_by_sym_range(self, sym, start, end):
         sym_expr = pycassa.create_index_expression("symbol", sym)
         start_expr = pycassa.create_index_expression("date", start, GTE)

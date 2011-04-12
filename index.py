@@ -67,6 +67,22 @@ class symbol:
         cass.connect(get_seed())
         results = cass.get_symbols_by_partial(term)
         return json.dumps(results)
+
+class daterange:
+    GET = web.autodelegate('GET_')
+    def GET_search(self):
+        return "Daterange"
+    def GET_search(self, args):
+	qs = urlparse.parse_qs(web.ctx.query[1:])
+	if 'term' not in qs:
+	    return "Error"
+	term = qs[term][0]
+	cass = cassandrabase.CassandraBase()
+	cass.connect(get_seed())
+	results = cass.get_daterange_by_sym(term)
+	return json.dumbs(results)
+	
+
 class index:
     def GET(self):
         return render.index("hi")
