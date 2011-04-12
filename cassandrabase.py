@@ -35,9 +35,10 @@ class CassandraBase(object):
 
     def get_by_sym_range2(self, sym, start, end):
         print "get_by_sym_range2: start=%s, end=%s" %(start, end)
-        result = self.STOCKS2.get(sym, column_count=14700, column_start=start, column_finish=end)
-
-        return result.items()
+        try:
+            result = self.STOCKS2.get(sym, column_count=14700, column_start=start, column_finish=end)
+            return result.items()
+        except pycassa.cassandra.ttypes.NotFoundException:
 
     def get_symbols_by_partial(self, sym_partial):
         partial = sym_partial.upper()
