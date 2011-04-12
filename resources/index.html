@@ -21,8 +21,6 @@ $def with (name)
             source: "/symbol/search/",
         });
         $$("#form1").validate({
-            changeMonth: true,
-            changeYear: true,
             rules: {
                 symbol: {
                     required: true,
@@ -34,8 +32,8 @@ $def with (name)
                                 $$.getJSON("/symbol/daterange/",{ "term": $$("#symbol").val() }, function(json) {
                                     $$( "#startdate" ).removeAttr('disabled');
                                     $$( "#enddate" ).removeAttr('disabled');
-                                    $$( "#enddate" ).datepicker({ dateFormat: 'yy-mm-dd', defaultDate: json['max'], minDate: json['min'], maxDate: json['max'] });
-                                    $$( "#startdate" ).datepicker({ dateFormat: 'yy-mm-dd', defaultDate: json['min'], minDate: json['min'], maxDate: json['max'] });
+                                    $$( "#enddate" ).datepicker({ changeMonth: true, changeYear: true, dateFormat: 'yy-mm-dd', defaultDate: json['max'], minDate: json['min'], maxDate: json['max'] });
+                                    $$( "#startdate" ).datepicker({ changeMonth: true, changeYear: true, dateFormat: 'yy-mm-dd', defaultDate: json['min'], minDate: json['min'], maxDate: json['max'] });
                                 });
                             } else {
                                 $$( "#startdate" ).attr('disabled', 'disabled');
