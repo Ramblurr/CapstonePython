@@ -22,7 +22,7 @@ class CassandraBase(object):
 	    return False
 
     def get_date_range_by_sym(self, sym):
-        result=self.STOCKS2.get(sym)
+        result=self.STOCKS2.get(sym, column_count=14700)
 	return result.keys()
 
     def get_by_sym_range(self, sym, start, end):
