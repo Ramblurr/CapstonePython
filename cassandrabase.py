@@ -28,7 +28,7 @@ class CassandraBase(object):
         partial = sym_partial.upper()
         key = partial[0]
         last = partial[len(partial)-1]
-        before = partial + "A"
+        before = partial
         after = partial + "Z"
         try:
             result = self.SYMBOLS.get(key, column_start=before, column_finish=after)
