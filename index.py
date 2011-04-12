@@ -115,7 +115,9 @@ class index:
 
         start_time = time.time()
         records = cass.get_by_sym_range2(sym, start, end)
-
+        if len(records) == 0:
+            message = "Zero records returned. Perhaps the date range is incorrect?"
+            return render.error(message)
         records_unsorted = []
         print "number records: %s" %(len(records))
         for r in records:
