@@ -1,0 +1,41 @@
+Price queries by symbol:
++----------------+------------------------+
+| row            | column families        |
++----------------+------------------------+
+|                | price:       | volume: |
++----------------+--------------+---------+
+| <symbol><date> | price:open   |         |
+|                | price:high   |         |
+|                | price:low    |         |
+|                | price:close  |         |
++----------------+--------------+---------+
+
+Price queries by date:
++----------------+------------------------+
+| row            | column families        |
++----------------+------------------------+
+|                | price:       | volume: |
++----------------+--------------+---------+
+| <date><symbol> | price:open   |         |
+|                | price:high   |         |
+|                | price:low    |         |
+|                | price:close  |         |
++----------------+--------------+---------+
+
+Range queries for symbol names:
++----------------+-----------------+
+| row            | column families |
++----------------+-----------------+
+|                | symbol:         |
++----------------+-----------------+
+| <firstletter>  | symbol:<symbol> |
+|                | symbol:<symbol> |
++----------------+-----------------+
+
+HBase-shell syntax:
+# Create table Symbols with column families price and volume
+create 'Symbols', 'price', 'volume'
+# Put value in a cell for the price:open column
+put 'Symbols', '<symbol><date>', 'price:open', '42.42'
+# Likewise for the other cells.
+# The apis can abstract this out.
