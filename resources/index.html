@@ -20,6 +20,8 @@ $def with (name)
         $$( "#symbol" ).autocomplete({
             source: "/symbol/search/",
         });
+        $$( "#enddate" ).datepicker({ changeMonth: true, changeYear: true, dateFormat: 'yy-mm-dd'});
+        $$( "#startdate" ).datepicker({ changeMonth: true, changeYear: true, dateFormat: 'yy-mm-dd'});
         $$("#form1").validate({
             rules: {
                 symbol: {
@@ -32,8 +34,12 @@ $def with (name)
                                 $$.getJSON("/symbol/daterange/",{ "term": $$("#symbol").val() }, function(json) {
                                     $$( "#startdate" ).removeAttr('disabled');
                                     $$( "#enddate" ).removeAttr('disabled');
-                                    $$( "#enddate" ).datepicker({ changeMonth: true, changeYear: true, dateFormat: 'yy-mm-dd', defaultDate: json['max'], minDate: json['min'], maxDate: json['max'] });
-                                    $$( "#startdate" ).datepicker({ changeMonth: true, changeYear: true, dateFormat: 'yy-mm-dd', defaultDate: json['min'], minDate: json['min'], maxDate: json['max'] });
+                                    $$( "#enddate" ).datepicker("option", "defaultDate",json['max']);
+                                    $$( "#enddate" ).datepicker("option", "minDate",json['min']);
+                                    $$( "#enddate" ).datepicker("option", "maxDate",json['max']);
+                                    $$( "#startdate" ).datepicker("option", "defaultDate",json['min']);
+                                    $$( "#startdate" ).datepicker("option", "minDate",json['min']);
+                                    $$( "#startdate" ).datepicker("option", "maxDate",json['max']);
                                 });
                             } else {
                                 $$( "#startdate" ).attr('disabled', 'disabled');
