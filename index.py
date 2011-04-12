@@ -190,7 +190,7 @@ class index:
 class static:
     # static whitelist
     def __init__(self):
-        self.whitelist = [ 'resources/main.css', 'resources/images/*' ]
+        self.whitelist = [ 'resources/main.css', 'resources/images/*', 'resources/jquery.validate.min.js' ]
 
     def in_whitelist(self, path):
         print "'%s'" % (path)
