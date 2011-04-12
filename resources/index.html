@@ -29,7 +29,7 @@ $def with (name)
                         type: "get" ,
                         complete: function(data){
                             if( data.responseText == "true" ) {
-                                $$.getJSON("/symbol/daterange/",{ "term": $$("#symbol").value() }, function(json) {
+                                $$.getJSON("/symbol/daterange/",{ "term": $$("#symbol").val() }, function(json) {
                                     $$( "#startdate" ).removeAttr('disabled');
                                     $$( "#enddate" ).removeAttr('disabled');
                                     $$( "#enddate" ).datepicker({ dateFormat: 'mm/dd/yy', defaultDate: json['min'], minDate: json['min'], maxDate: json['max'] });
