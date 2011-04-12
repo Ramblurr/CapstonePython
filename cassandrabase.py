@@ -26,7 +26,7 @@ class CassandraBase(object):
 	total_dates = result.keys()
 	range = []
 	range.append(total_dates[0])
-	range.append(total-dates[len(total_dates)-1])
+	range.append(total_dates[len(total_dates)-1])
 	return range
 
     def get_by_sym_range(self, sym, start, end):
