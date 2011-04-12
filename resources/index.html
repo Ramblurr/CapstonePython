@@ -33,7 +33,7 @@ $def with (name)
                                     $$( "#startdate" ).removeAttr('disabled');
                                     $$( "#enddate" ).removeAttr('disabled');
                                     $$( "#enddate" ).datepicker({ dateFormat: 'yy-mm-dd', defaultDate: json['min'], minDate: json['min'], maxDate: json['max'] });
-                                    $$( "#startdate" ).datepicker({ dateFormat: 'yy-mm-dd', defaultDate: json['min'], minDate: json['min'], maxDate: json['max'] });
+                                    $$( "#startdate" ).datepicker({ dateFormat: 'yy-mm-dd', defaultDate: json['max'], minDate: json['min'], maxDate: json['max'] });
                                 });
                             } else {
                                 $$( "#startdate" ).attr('disabled', 'disabled');
