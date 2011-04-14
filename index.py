@@ -51,7 +51,42 @@ class index:
 
 class mysql:
     def GET(self, args = None):
-        return render.mysql("hi")
+        # /mysql or /mysql/
+        if args is None or len(args) == 0:
+            # regular form page
+            return render.hbase("hi")
+        print "GET " +args
+        #/mysql/symbol/exists
+        if re.match("symbol/exists", args):
+            self.GET_exists(args)
+        #/mysql/symbol/search
+        elif re.match("symbol/search", args):
+            self.GET_search(args)
+        #/mysql/symbol/daterange
+        elif re.match("symbol/daterange", args):
+            self.GET_daterange(args);
+
+    def GET_exists(self, args):
+        qs = urlparse.parse_qs(web.ctx.query[1:])
+        print "sym exists: %s" %( web.ctx.query[1:])
+        if 'symbol' not in qs:
+            return "Error"
+        term = qs['symbol'][0]
+        # TALK to database here
+
+    def GET_search(self, args):
+        qs = urlparse.parse_qs(web.ctx.query[1:])
+        if 'term' not in qs:
+            return "Error"
+        term = qs['term'][0]
+        # TALK to database here
+
+    def GET_daterange(self, args):
+        qs = urlparse.parse_qs(web.ctx.query[1:])
+        if 'term' not in qs:
+            return "Error"
+        term = qs['term'][0]
+        # TALK to database here
 
 class hbase:
     def GET(self, args = None):
@@ -69,6 +104,28 @@ class hbase:
         #/hbase/symbol/daterange
         elif re.match("symbol/daterange", args):
             self.GET_daterange(args);
+
+    def GET_exists(self, args):
+        qs = urlparse.parse_qs(web.ctx.query[1:])
+        print "sym exists: %s" %( web.ctx.query[1:])
+        if 'symbol' not in qs:
+            return "Error"
+        term = qs['symbol'][0]
+        # TALK to database here
+
+    def GET_search(self, args):
+        qs = urlparse.parse_qs(web.ctx.query[1:])
+        if 'term' not in qs:
+            return "Error"
+        term = qs['term'][0]
+        # TALK to database here
+
+    def GET_daterange(self, args):
+        qs = urlparse.parse_qs(web.ctx.query[1:])
+        if 'term' not in qs:
+            return "Error"
+        term = qs['term'][0]
+        # TALK to database here
 
 class cassandra:
     def GET(self, args = None):
