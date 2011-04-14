@@ -6,11 +6,10 @@ from pycassa.index import *
 
 class HbaseBase(object):
     def __init__(self):
-        self.config.host = "enter ip address here"
-	
+        self.config = settings.Settings().hbase	
     def test(self):
-        sys = SystemManager(self.config.host)
-        print sys.list_keyspaces()
+        sys = pybase.connect([self.config.host])
+        print sys.getTableNames()
 
     def sym_exists(self, sym):
 	try:
@@ -43,11 +42,8 @@ class HbaseBase(object):
 
     def get_by_sym_range2(self, sym, start, end):
         print "get_by_sym_range2: start=%s, end=%s" %(start, end)
-        try:
-            result = self.STOCKS2.get(sym, column_count=14700, column_start=start, column_finish=end)
-            return result.items()
-        except pycassa.cassandra.ttypes.NotFoundException:
-            return []
+        scanner = self.STOCKS2.scanner(sym+start, sym+end, "price")
+        return scanner
 
     def get_symbols_by_partial(self, sym_partial):
         partial = sym_partial.upper()
@@ -63,13 +59,13 @@ class HbaseBase(object):
 
     def connect(self, host=None):
         if host is None:
-            self.pool = pycassa.connect(self.config.keyspace, [self.config.host])
+            self.pool = pybase.connect([self.config.host])
             print "connecting to %s" %(self.config.host)
         else:
-            self.pool = pycassa.connect(self.config.keyspace, [host])
+            self.pool = pybase.connect( [host])
             print "connecting to %s" %(host)
-        self.STOCKS2 = pycassa.ColumnFamily(self.pool, "Stocks2")
-        self.SYMBOLS = pycassa.ColumnFamily(self.pool, "StockSymbols")
+        self.STOCKS2 = pybase.HTable(self.pool, "Stocks2", [ColumnDescriptor(name='price:'),ColumnDescriptor(name='volume:'),])
+        self.SYMBOLS = pybase.HTable(self.pool, "StockSymbols", [ColumnDescriptor(name='symbol:'),])
 
     def insert(self, record):
         id = uuid.uuid1()
@@ -86,23 +82,24 @@ class HbaseBase(object):
             if i % 1000 == 0:
                 print rec
             i += 1
+
     def insert_batch2(self, parser):
-        b = self.STOCKS2.batch(queue_size=1000)
-        i = 0
-        last = ''
+        a  = HTable(client, "Stocks2", [ColumnDescriptor(name='price:'), ColumnDescriptor(name='volume:')], createIfNotExist=True, overwrite=False)
+        b  = HTable(client, "Symbols", [ColumnDescriptor(name='price:'), ColumnDescriptor(name='volume:')], createIfNotExist=True, overwrite=False)
+        i =0
+
         for rec in parser:
             symbol = rec['symbol']
             date = rec['date']
+	    symboldate = symbol+date
+	    datesymbol = date+symbol
             #del rec['symbol']
             #del rec['date']
-            b.insert(symbol, {date: rec})
-            b.insert(date, {symbol: rec})
-            if last != symbol:
-                self.SYMBOLS.insert(symbol[0], {symbol:''})
-            last = symbol
+	    changes = {"price:open":rec['price_open'], "price:high":rec['price_high'], "price:low":rec['price_low'], "price:close":rec['price_close']}
+            a.insert(symboldate, changes)
+            b.insert(datesymbol, changes)
             if i % 1000 == 0:
                 print rec
-            i += 1
 
     def get_by_symbol(self, symbol):
         sym_expr = pycassa.create_index_expression("symbol", symbol)
