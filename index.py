@@ -13,6 +13,8 @@ from pygooglechart import Axis
 urls = ( '/', 'index',
          '/cassandra', 'cassandra',
          '/cassandra/(.*)', 'cassandra',
+         '/hbase', 'hbase',
+         '/hbase/(.*)', 'hbase',
          '/seed', 'seed',
          '/res/(.*)', 'static')
 render = web.template.render('resources/')
@@ -43,13 +45,31 @@ class seed:
         set_seed(ip_address)
 class index:
     def GET(self):
-        return "Hello"
+        return render.index("hi")
+
+class hbase:
+    def GET(self, args = None):
+        # /hbase or /hbase/
+        if args is None or len(args) == 0:
+            # regular form page
+            return render.hbase("hi")
+        print "GET " +args
+        #/hbase/symbol/exists
+        if re.match("symbol/exists", args):
+            self.GET_exists(args)
+        #/hbase/symbol/search
+        elif re.match("symbol/search", args):
+            self.GET_search(args)
+        #/hbase/symbol/daterange
+        elif re.match("symbol/daterange", args):
+            self.GET_daterange(args);
+
 class cassandra:
     def GET(self, args = None):
         # /cassandra or /cassandra/
         if args is None or len(args) == 0:
             # regular form page
-            return render.index("hi")
+            return render.cassandra("hi")
         print "GET " +args
         #/cassandra/symbol/exists
         if re.match("symbol/exists", args):
@@ -146,16 +166,16 @@ class cassandra:
         data = []
         for q in records_processed:
             temp = float(q['price_adj_close'])
-                data.append(temp)
+            data.append(temp)
             if temp > y_max:
-            y_max = temp
+                y_max = temp
 
         y_min = y_max
 
         for d in records_processed:
             temp = float(d['price_adj_close'])
             if temp <  y_min:
-            y_min = temp
+                y_min = temp
 
         difference = float(y_max - y_min)
         difference = float(difference/2)
