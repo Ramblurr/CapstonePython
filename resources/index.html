@@ -18,7 +18,7 @@ $def with (name)
   <script type="text/javascript">
     $$(document).ready(function() {
         $$( "#symbol" ).autocomplete({
-            source: "/symbol/search/",
+            source: "/cassandra/symbol/search/",
         });
         $$( "#enddate" ).datepicker({ changeMonth: true, changeYear: true, dateFormat: 'yy-mm-dd'});
         $$( "#startdate" ).datepicker({ changeMonth: true, changeYear: true, dateFormat: 'yy-mm-dd'});
@@ -27,11 +27,11 @@ $def with (name)
                 symbol: {
                     required: true,
                     remote: {
-                        url: "/symbol/exists/" ,
+                        url: "/cassandra/symbol/exists/" ,
                         type: "get" ,
                         complete: function(data){
                             if( data.responseText == "true" ) {
-                                $$.getJSON("/symbol/daterange/",{ "term": $$("#symbol").val() }, function(json) {
+                                $$.getJSON("/cassandra/symbol/daterange/",{ "term": $$("#symbol").val() }, function(json) {
                                     $$( "#startdate" ).removeAttr('disabled');
                                     $$( "#enddate" ).removeAttr('disabled');
                                     $$( "#enddate" ).datepicker("option", "defaultDate",json['max']);

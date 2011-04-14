@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import web
-import os, glob, time, json, urlparse
+import os, glob, time, json, urlparse, re
 from datetime import datetime
 from web import form
 import cassandrabase
@@ -11,8 +11,8 @@ from pygooglechart import SimpleLineChart
 from pygooglechart import Axis
 
 urls = ( '/', 'index',
-         '/results', 'results',
-         '/symbol/(.*)', 'symbol',
+         '/cassandra', 'cassandra',
+         '/cassandra/(.*)', 'cassandra',
          '/seed', 'seed',
          '/res/(.*)', 'static')
 render = web.template.render('resources/')
@@ -41,9 +41,25 @@ class seed:
     def POST(self):
         ip_address = web.input()['ip']
         set_seed(ip_address)
-
-class symbol:
-    GET = web.autodelegate('GET_')
+class index:
+    def GET(self):
+        return "Hello"
+class cassandra:
+    def GET(self, args = None):
+        # /cassandra or /cassandra/
+        if args is None or len(args) == 0:
+            # regular form page
+            return render.index("hi")
+        print "GET " +args
+        #/cassandra/symbol/exists
+        if re.match("symbol/exists", args):
+            self.GET_exists(args)
+        #/cassandra/symbol/search
+        elif re.match("symbol/search", args):
+            self.GET_search(args)
+        #/cassandra/symbol/daterange
+        elif re.match("symbol/daterange", args):
+            self.GET_daterange(args);
 
     def GET_exists(self, args):
         qs = urlparse.parse_qs(web.ctx.query[1:])
@@ -67,23 +83,20 @@ class symbol:
         return json.dumps(results)
 
     def GET_daterange(self, args):
-	qs = urlparse.parse_qs(web.ctx.query[1:])
-	if 'term' not in qs:
-	    return "Error"
-	term = qs['term'][0]
-	cass = cassandrabase.CassandraBase()
-	cass.connect(get_seed())
-	results = cass.get_date_range_by_sym(term)
-	return json.dumps(results)
+        qs = urlparse.parse_qs(web.ctx.query[1:])
+        if 'term' not in qs:
+            return "Error"
+        term = qs['term'][0]
+        cass = cassandrabase.CassandraBase()
+        cass.connect(get_seed())
+        results = cass.get_date_range_by_sym(term)
+        return json.dumps(results)
 
-class index:
-    def GET(self):
-        return render.index("hi")
 
     def getMonth(self, x):
         return {
-            1: "Jan",        
-	    2: "Feb",
+            1: "Jan",
+            2: "Feb",
             3: "Mar",
             4: "Apr",
             5: "May",
@@ -124,39 +137,39 @@ class index:
 	    temp = r[1]
             temp['date'] = datetime.strptime(str(temp['date']), "%Y-%m-%d")
             records_unsorted.append(temp)
-            
-	records_processed = sorted(records_unsorted, key = lambda k: k['date'])
+
+        records_processed = sorted(records_unsorted, key = lambda k: k['date'])
         elapsed_time = (time.time() - start_time)
 
-	y_max = 0.0
-	y_min = 0.0
-	data = []
-	for q in records_processed:
-	    temp = float(q['price_adj_close'])
-            data.append(temp)
-	    if temp > y_max:
-		y_max = temp
+        y_max = 0.0
+        y_min = 0.0
+        data = []
+        for q in records_processed:
+            temp = float(q['price_adj_close'])
+                data.append(temp)
+            if temp > y_max:
+            y_max = temp
 
-	y_min = y_max
+        y_min = y_max
 
-	for d in records_processed:
-	    temp = float(d['price_adj_close'])
-	    if temp <  y_min:
-		y_min = temp
-		
-	difference = float(y_max - y_min)
-	difference = float(difference/2)
-	
-	y_min_foo = y_min-difference
-	y_max_foo = y_max+difference
-	
-	if y_min_foo < 0:
-	    y_min_foo = 0
-	
-	chart = SimpleLineChart(1000, 300, y_range=[y_min_foo, y_max_foo])
-	
-	chart.add_data(data)
-	chart.set_colours(['0000FF'])
+        for d in records_processed:
+            temp = float(d['price_adj_close'])
+            if temp <  y_min:
+            y_min = temp
+
+        difference = float(y_max - y_min)
+        difference = float(difference/2)
+
+        y_min_foo = y_min-difference
+        y_max_foo = y_max+difference
+
+        if y_min_foo < 0:
+            y_min_foo = 0
+
+        chart = SimpleLineChart(1000, 300, y_range=[y_min_foo, y_max_foo])
+
+        chart.add_data(data)
+        chart.set_colours(['0000FF'])
 #	chart.fill_linear_stripes(Chart.CHART, 0, 'CCCCCC', 0.1, 'FFFFFF', 0.2)
 #	chart.set_grid(0, 25, 5, 5)
 
@@ -164,40 +177,39 @@ class index:
 #	left_axis = range(y_min_foo, y_max_foo, 1.00)
 #	left_axis[0] = y_min
 
-	left_axis = []
-	label = y_min_foo
-	delta_y = 1.00
-	derp = float(y_max_foo - y_min_foo)
+        left_axis = []
+        label = y_min_foo
+        delta_y = 1.00
+        derp = float(y_max_foo - y_min_foo)
 #	if derp > 15.0:
-	delta_y = derp/(10.00)
+        delta_y = derp/(10.00)
 
-	while y_min_foo < y_max_foo:
-	    left_axis.append(y_min_foo)
-	    y_min_foo = y_min_foo + delta_y
+        while y_min_foo < y_max_foo:
+            left_axis.append(y_min_foo)
+            y_min_foo = y_min_foo + delta_y
 
-	if len(left_axis) < 10:
-	    left_axis.append(y_min_foo)
-	
-	lines = len(left_axis)-1
-	chart.set_grid(0, lines, 1, 1)	
+        if len(left_axis) < 10:
+            left_axis.append(y_min_foo)
 
-	x_labels = []
-		
-	for t in records_processed:
-                label = (self.getMonth(t['date'].month ), t['date'].year)
-                if not label in x_labels:
-                    x_labels.append( label )
-			
-	chart.set_axis_labels(Axis.LEFT, left_axis)
-	chart.set_axis_labels(Axis.BOTTOM, x_labels)
-	list_len = float(len(x_labels))
-	top = float(1)
-	stripe_len = float(top /list_len) 
-	chart.fill_linear_stripes(Chart.CHART, 0, 'CCCCCC', stripe_len, 'FFFFFF', stripe_len)
-	imgURL = chart.get_url()	
+        lines = len(left_axis)-1
+        chart.set_grid(0, lines, 1, 1)
+
+        x_labels = []
+
+        for t in records_processed:
+            label = (self.getMonth(t['date'].month ), t['date'].year)
+            if not label in x_labels:
+                x_labels.append( label )
+
+        chart.set_axis_labels(Axis.LEFT, left_axis)
+        chart.set_axis_labels(Axis.BOTTOM, x_labels)
+        list_len = float(len(x_labels))
+        top = float(1)
+        stripe_len = float(top /list_len)
+        chart.fill_linear_stripes(Chart.CHART, 0, 'CCCCCC', stripe_len, 'FFFFFF', stripe_len)
+        imgURL = chart.get_url()
 
         return render.results(sym, records_processed, elapsed_time, imgURL)
-
 
 class static:
     # static whitelist
