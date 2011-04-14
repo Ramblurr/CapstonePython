@@ -1,0 +1,45 @@
+$def with (name)
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>NoSQL - Stocks Demo</title>
+
+<link rel="stylesheet" href="/res/main.css" type="text/css" />
+<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/themes/smoothness/jquery-ui.css" type="text/css" rel="Stylesheet" />
+
+  <!-- Reference jQuery and jQuery UI from the CDN. Remember
+       that the order of these two elements is important -->
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js"></script>
+  <script src="/res/jquery.validate.min.js"></script>
+
+  <!-- Initialize the tabs when the document is ready -->
+  <script type="text/javascript">
+    $$(document).ready(function() {
+        $$("#cassandra").click(function() { window.location.href = "/cassandra"; });
+        $$("#hbase").click(function() { window.location.href = "/hbase"; });
+        $$("#mysql").click(function() { window.location.href = "/mysql"; });
+    });
+  </script>
+
+<link href='http://fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+
+</head>
+
+<body>
+<div id="content">
+<div id="header">
+<h1> Stocks Demo </h1>
+</div>
+
+<div id="buttons">
+<h3>Choose your poison:</h3>
+<ul>
+<li><button type="button" id="cassandra" name="" value="Cassandra" class="introbutton">Cassandra</button></li>
+<li><button type="button" id="hbase" name="" value="HBase" class="introbutton">HBase</button></li>
+<li><button type="button" id="mysql" name="" value="MySQL" class="introbutton">MySQL</button></li>
+</div>
+
+</body>

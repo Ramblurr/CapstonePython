@@ -7,6 +7,7 @@ body {
 #content {
     min-width:500px;
     max-width:1000px;
+    min-height: 500px;
     margin:0px auto;
     text-align:left;
     padding:5px 15px;
@@ -186,4 +187,57 @@ background: -webkit-gradient(
         from(#42aaff),
         to(#001e3b));
     
+}
+
+
+button.introbutton {
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 30px;
+        color: #ffffff;
+        padding: 10px 20px;
+        min-height: 100px;
+        background: -moz-linear-gradient(
+                top,
+                #4D94FF 0%,
+                #003fab);
+        background: -webkit-gradient(
+                linear, left top, left bottom,
+                from(#4D94FF),
+                to(#003fab));
+        border-radius: 0px;
+        -moz-border-radius: 0px;
+        -webkit-border-radius: 0px;
+        border: 1px solid #04007d;
+        -moz-box-shadow:
+                0px 1px 3px rgba(000,000,000,0.5),
+                inset 0px 0px 2px rgba(255,255,255,0.7);
+        -webkit-box-shadow:
+                0px 1px 3px rgba(000,000,000,0.5),
+                inset 0px 0px 2px rgba(255,255,255,0.7);
+        text-shadow:
+                0px -1px 0px rgba(000,000,000,0.4),
+                0px 1px 0px rgba(255,255,255,0.3);
+}
+
+button.introbutton:hover {
+    color: #ffffff;
+    background: -moz-linear-gradient(
+                top,
+                #1975ff 0%,
+                #002461);
+    background: -webkit-gradient(
+                linear, left top, left bottom,
+                from(#1975ff),
+                to(#002461));
+}
+
+#buttons {
+    text-align:center;
+    width: 50%;
+    margin: auto;
+}
+#buttons ul, #buttons li {
+    display: inline;
+    margin: 0;
+    padding: 0
 }

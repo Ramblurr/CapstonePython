@@ -1,0 +1,99 @@
+$def with (name)
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>NoSQL - Stocks Demo - HBase</title>
+
+<link rel="stylesheet" href="/res/main.css" type="text/css" />
+<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/themes/smoothness/jquery-ui.css" type="text/css" rel="Stylesheet" />
+
+  <!-- Reference jQuery and jQuery UI from the CDN. Remember
+       that the order of these two elements is important -->
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js"></script>
+  <script src="/res/jquery.validate.min.js"></script>
+
+  <!-- Initialize the tabs when the document is ready -->
+  <script type="text/javascript">
+    $$(document).ready(function() {
+        $$( "#symbol" ).autocomplete({
+            source: "/hbase/symbol/search/",
+        });
+        $$( "#enddate" ).datepicker({ changeMonth: true, changeYear: true, dateFormat: 'yy-mm-dd'});
+        $$( "#startdate" ).datepicker({ changeMonth: true, changeYear: true, dateFormat: 'yy-mm-dd'});
+        $$("#form1").validate({
+            rules: {
+                symbol: {
+                    required: true,
+                    remote: {
+                        url: "/hbase/symbol/exists/" ,
+                        type: "get" ,
+                        complete: function(data){
+                            if( data.responseText == "true" ) {
+                                $$.getJSON("/hbase/symbol/daterange/",{ "term": $$("#symbol").val() }, function(json) {
+                                    $$( "#startdate" ).removeAttr('disabled');
+                                    $$( "#enddate" ).removeAttr('disabled');
+                                    $$( "#enddate" ).datepicker("option", "defaultDate",json['max']);
+                                    $$( "#enddate" ).datepicker("option", "minDate",json['min']);
+                                    $$( "#enddate" ).datepicker("option", "maxDate",json['max']);
+                                    $$( "#startdate" ).datepicker("option", "defaultDate",json['min']);
+                                    $$( "#startdate" ).datepicker("option", "minDate",json['min']);
+                                    $$( "#startdate" ).datepicker("option", "maxDate",json['max']);
+                                });
+                            } else {
+                                $$( "#startdate" ).attr('disabled', 'disabled');
+                                $$( "#enddate" ).attr('disabled', 'disabled');
+                            }
+                        }
+                    }
+                },
+                startdate: "required",
+                enddate: "required"
+            },
+            messages: {
+                symbol: {
+                    required: "Enter a stock symbol",
+                    remote: jQuery.format("{0} does not exist")
+                }
+            }
+        });
+    });
+  </script>
+
+<link href='http://fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+
+</head>
+
+<body>
+<div id="content">
+<div id="header">
+<h1> Stocks Demo </h1>
+</div>
+<h2>HBase</h2>
+<div class="form">
+<p>Enter the stock symbol and date range you would like to query the database for.</p>
+    <form id="form1" action="/" method="post">
+
+        <fieldset><legend>Symbol Lookup</legend>
+                <p class="first">
+                        <label for="symbol">Symbol</label>
+                        <input type="text" name="symbol" id="symbol" size="30" />
+                </p>
+                <p>
+                        <label for="startdate">Start Date</label>
+                        <input disabled="disabled" type="text" name="startdate" id="startdate" size="30" />
+                </p>
+                <p>
+                        <label for="enddate">End Date</label>
+                        <input disabled="disabled" type="text" name="enddate" id="enddate" size="30" />
+                </p>
+        </fieldset>
+        <p class="submit"><button type="submit">Submit</button></p>
+
+    </form>
+
+</div>
+
+</body>
