@@ -32,14 +32,6 @@ class CassandraBase(object):
         except pycassa.cassandra.ttypes.NotFoundException:
             return []
 
-    def get_by_sym_range(self, sym, start, end):
-        sym_expr = pycassa.create_index_expression("symbol", sym)
-        start_expr = pycassa.create_index_expression("date", start, GTE)
-        end_expr = pycassa.create_index_expression("date", end, LTE)
-        clause = pycassa.create_index_clause([sym_expr, start_expr, end_expr])
-        result = self.STOCKS.get_indexed_slices(clause)
-        return result
-
     def get_by_sym_range2(self, sym, start, end):
         print "get_by_sym_range2: start=%s, end=%s" %(start, end)
         try:
@@ -74,17 +66,6 @@ class CassandraBase(object):
         id = uuid.uuid1()
         self.STOCKS.insert(str(id), record)
 
-    def insert_batch(self, parser):
-        b = self.STOCKS.batch(queue_size=1000)
-        i = 0
-        for rec in parser:
-            d = rec['date'].replace("-", "")
-            rec['date'] = int(d)
-            id = uuid.uuid1()
-            b.insert(str(id), rec)
-            if i % 1000 == 0:
-                print rec
-            i += 1
     def insert_batch2(self, parser):
         b = self.STOCKS2.batch(queue_size=1000)
         i = 0
@@ -92,8 +73,6 @@ class CassandraBase(object):
         for rec in parser:
             symbol = rec['symbol']
             date = rec['date']
-            #del rec['symbol']
-            #del rec['date']
             b.insert(symbol, {date: rec})
             b.insert(date, {symbol: rec})
             if last != symbol:
@@ -108,7 +87,3 @@ class CassandraBase(object):
         clause = pycassa.create_index_clause([sym_expr])
         result = self.STOCKS.get_indexed_slices(clause)
         return result
-
-    def get_uuid(self, uuid):
-        return self.STOCKS.get(uuid)
-
