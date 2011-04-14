@@ -21,14 +21,6 @@ def test_cassandra():
     cass = cassandrabase.CassandraBase()
     cass.test()
 
-def test_insert():
-    cass = cassandrabase.CassandraBase()
-    cass.connect()
-    config = settings.Settings()
-    data_path = config.data_path
-    p = parser.Parser(data_path)
-    cass.insert_batch(p)
-
 def test_insert2():
     cass = cassandrabase.CassandraBase()
     cass.connect()
@@ -45,9 +37,7 @@ if __name__ == "__main__":
         test_cassandra()
     elif sys.argv[1] == "nasdaq":
         test_nasdaq()
-    elif sys.argv[1] == "insert":
-        test_insert()
     elif sys.argv[1] == "insert2":
         test_insert2()
     else:
-        print "usage: test.py cassandra|nasdaq|insert"
+        print "usage: test.py cassandra|nasdaq|insert2"
