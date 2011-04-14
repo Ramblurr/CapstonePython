@@ -15,6 +15,13 @@ class HbaseBase(object):
     def test(self):
         sys = pybase.connect([self.config.host])
         print sys.getTableNames()
+#no
+    def get_record(self, sym):
+        it = self.STOCKS.scanner(sym, "price")
+        for i in it:
+            tcell = i[0].columns
+            open = tcell['price:open'].value
+            print(open)
 
 #no
     def sym_exists(self, sym):
@@ -33,8 +40,9 @@ class HbaseBase(object):
 	        #range.append(total_dates[len(total_dates)-1])
             #return range
       #  except pycassa.cassandra.ttypes.NotFoundException:
-       #     return []
-#yes
+       #     return [
+       #     ]
+#no
     def get_by_sym_range2(self, sym, start, end):
         print "get_by_sym_range2: start=%s, end=%s" %(start, end)
         scanner = self.STOCKS2.scanner(sym+start, sym+end, "price")
@@ -52,17 +60,21 @@ class HbaseBase(object):
         except pycassa.cassandra.ttypes.NotFoundException:
             return []
 
-#yes
+#no
     def connect(self, host=None):
         if host is None:
             self.pool = pybase.connect([self.config.host])
             print "connecting to %s" %(self.config.host)
+            self.STOCKS = pybase.HTable(self.pool, "Stocks", [ColumnDescriptor(name='price:'), ColumnDescriptor(name='volume:')])
+            self.DATES = pybase.HTable(self.pool, "Dates", [ColumnDescriptor(name='price:'), ColumnDescriptor(name='volume:')])
+            self.SYMBOLS = pybase.HTable(self.pool, "Symbols", [ColumnDescriptor(name='symbol:')])
+
         else:
             self.pool = pybase.connect( [host])
             print "connecting to %s" %(host)
-        self.STOCKS = pybase.HTable(self.pool, "StockSymbol", [ColumnDescriptor(name='price:'), ColumnDescriptor(name='volume:')])
-        self.DATES = pybase.HTable(self.pool, "StockDate", [ColumnDescriptor(name='price:'), ColumnDescriptor(name='volume:')])
-        self.SYMBOLS = pybase.HTable(self.pool, "Symbols", [ColumnDescriptor(name='symbol:')])
+            self.STOCKS = pybase.HTable(self.pool, "Stocks", [ColumnDescriptor(name='price:'), ColumnDescriptor(name='volume:')])
+            self.DATES = pybase.HTable(self.pool, "Dates", [ColumnDescriptor(name='price:'), ColumnDescriptor(name='volume:')])
+            self.SYMBOLS = pybase.HTable(self.pool, "Symbols", [ColumnDescriptor(name='symbol:')])
 
 #yes
     def insert_batch2(self, parser):
@@ -75,21 +87,23 @@ class HbaseBase(object):
             datesymbol = date+symbol
             #del rec['symbol']
             #del rec['date']
-            changes = {"price:open":rec['price_open'], "price:high":rec['price_high'], "price:low":rec['price_low'], "price:close":rec['price_close']}
-            sym_columnname = "symbols:" + rec['symbol']
+            changes = {'price_open':rec['price_open'], 'price_high':rec['price_high'], 'price_low':rec['price_low'], 'price_close':rec['price_close']}
+            sym_columnname = 'symbols:' + rec['symbol']
             sym_changes = {sym_columnname:rec['symbol']}
             self.STOCKS.insert(symboldate, changes)
             self.DATES.insert(datesymbol, changes)
-            if last != symbol:
-                self.SYMBOLS.insert(symboldate[0], sym_changes)
+#            if last != symbol:
+#                self.SYMBOLS.insert(symbol[0], sym_changes)
             last = symbol
-            if i % 1000 == 0:
-                print rec
+      #      if i % 1000 == 0:
+       #         print rec
             i += 1
-            return
+            if i > 1:
+                return
 
 #no
     def get_by_symbol(self, symbol):
+        scanner = self.STOCKS.scanner(symbol, "price")
         sym_expr = pycassa.create_index_expression("symbol", symbol)
         clause = pycassa.create_index_clause([sym_expr])
         result = self.STOCKS.get_indexed_slices(clause)
