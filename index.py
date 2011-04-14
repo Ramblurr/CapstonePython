@@ -15,6 +15,8 @@ urls = ( '/', 'index',
          '/cassandra/(.*)', 'cassandra',
          '/hbase', 'hbase',
          '/hbase/(.*)', 'hbase',
+         '/mysql', 'mysql',
+         '/mysql/(.*)', 'mysql',
          '/seed', 'seed',
          '/res/(.*)', 'static')
 render = web.template.render('resources/')
@@ -46,6 +48,10 @@ class seed:
 class index:
     def GET(self):
         return render.index("hi")
+
+class mysql:
+    def GET(self, args = None):
+        return render.mysql("hi")
 
 class hbase:
     def GET(self, args = None):
