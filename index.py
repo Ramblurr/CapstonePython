@@ -23,10 +23,10 @@ render = web.template.render('resources/')
 app = web.application(urls, globals())
 
 request = form.Form (
-	form.Textbox('symbol', form.notnull),
-	form.Textbox('startdate', form.notnull),
-	form.Textbox('enddate', form.notnull),
-	form.Button('Request', type="submit")
+    form.Textbox('symbol', form.notnull),
+    form.Textbox('startdate', form.notnull),
+    form.Textbox('enddate', form.notnull),
+    form.Button('Request', type="submit")
 )
 
 def get_seed():
