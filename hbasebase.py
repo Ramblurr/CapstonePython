@@ -15,52 +15,75 @@ class HbaseBase(object):
     def test(self):
         sys = pybase.connect([self.config.host])
         print sys.getTableNames()
-#no
+#yes
     def get_record(self, sym):
         it = self.STOCKS.scanner(sym, "price")
         for i in it:
             tcell = i[0].columns
-            open = tcell['price:open'].value
-            print(open)
+            open = tcell['price:price_open'].value
+            print open
 
-#no
+#yes
     def sym_exists(self, sym):
         sym = sym.upper().strip()
         print "sym exists: " + sym
         key = sym[0]
-        results = s
+        records = 0
+        scanner = self.STOCKS.scanner(sym, "price")
+        for i in scanner:
+            records = records + 1
+        if records > 0:
+            return True
+        if records == 0:
+            return False
 
-#no
-  #  def get_date_range_by_sym(self, sym):
-      #  try:
-         #   result = self.STOCKS2.get(sym, column_count=14700)
-	    #    total_dates = result.keys()
-	      #  range = []
-	       # range.append(total_dates[0])
-	        #range.append(total_dates[len(total_dates)-1])
-            #return range
-      #  except pycassa.cassandra.ttypes.NotFoundException:
-       #     return [
-       #     ]
-#no
+#yes
+    def get_date_range_by_sym(self, sym):
+        scanner = self.STOCKS.scanner(sym, "price")
+        dates = []
+        for i in scanner:
+            date = i[0].row
+            date = date.lstrip(sym)
+            dates.append(date)
+        range = []
+        range.append(dates[0])
+        range.append(dates[len(_dates)-1])
+        return range
+
+#yes
     def get_by_sym_range2(self, sym, start, end):
         print "get_by_sym_range2: start=%s, end=%s" %(start, end)
         scanner = self.STOCKS2.scanner(sym+start, sym+end, "price")
-        return scanner
-#no
+        results = []
+        for i in scanner:
+            temp = {}
+            date = i[0].row
+            date = date.lstrip(sym)
+            temp['date'] = date
+            tcell = i[0].columns
+            temp['price_open'] = tcell['price:price_open'].value
+            temp['price_high'] = tcell['price:price_high'].value
+            temp['price_low'] = tcell['price:price_low'].value
+            temp['price_close'] = tcell['price:price_close'].value
+            temp['price_adj_close'] = tecell['price:price_adj_close'].value
+            results.append(temp)
+        return results
+
+#yes
     def get_symbols_by_partial(self, sym_partial):
         partial = sym_partial.upper()
         key = partial[0]
         last = partial[len(partial)-1]
         before = partial
         after = partial + "Z"
-        try:
-            result = self.SYMBOLS.get(key, column_start=before, column_finish=after)
-            return result.keys()
-        except pycassa.cassandra.ttypes.NotFoundException:
-            return []
+        scanner = self.SYMBOLS.scanner(key, "symbol")
+        for i in scanner:
+            tcell = i[0].columns
+            result = tcell.__repr__()
+            return result.values()
+            
 
-#no
+#yes
     def connect(self, host=None):
         if host is None:
             self.pool = pybase.connect([self.config.host])
@@ -87,24 +110,34 @@ class HbaseBase(object):
             datesymbol = date+symbol
             #del rec['symbol']
             #del rec['date']
-            changes = {'price_open':rec['price_open'], 'price_high':rec['price_high'], 'price_low':rec['price_low'], 'price_close':rec['price_close']}
-            sym_columnname = 'symbols:' + rec['symbol']
+            changes = {'price:price_open':rec['price_open'], 'price:price_high':rec['price_high'], 'price:price_low':rec['price_low'], 'price:price_close':rec['price_close'], 'price:price_adj_close':rec['price_adj_close']}
+            sym_columnname = 'symbol:symbol_' + rec['symbol']
             sym_changes = {sym_columnname:rec['symbol']}
             self.STOCKS.insert(symboldate, changes)
             self.DATES.insert(datesymbol, changes)
-#            if last != symbol:
-#                self.SYMBOLS.insert(symbol[0], sym_changes)
+            if last != symbol:
+                self.SYMBOLS.insert(symbol[0], sym_changes)
             last = symbol
       #      if i % 1000 == 0:
        #         print rec
             i += 1
-            if i > 1:
+            if i > 3:
                 return
 
-#no
-    def get_by_symbol(self, symbol):
-        scanner = self.STOCKS.scanner(symbol, "price")
-        sym_expr = pycassa.create_index_expression("symbol", symbol)
-        clause = pycassa.create_index_clause([sym_expr])
-        result = self.STOCKS.get_indexed_slices(clause)
-        return result
+#yes
+    def get_by_symbol(self, symbol):  
+        scanner = self.STOCKS2.scanner(sym, "price")
+        results = []
+        for i in scanner:
+            temp = {}
+            date = i[0].row
+            date = date.lstrip(sym)
+            temp['date'] = date
+            tcell = i[0].columns
+            temp['price_open'] = tcell['price:price_open'].value
+            temp['price_high'] = tcell['price:price_high'].value
+            temp['price_low'] = tcell['price:price_low'].value
+            temp['price_close'] = tcell['price:price_close'].value
+            temp['price_adj_close'] = tecell['price:price_adj_close'].value
+            results.append(temp)
+        return results
