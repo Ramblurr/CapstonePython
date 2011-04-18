@@ -111,6 +111,10 @@ class hbase:
         if 'symbol' not in qs:
             return "Error"
         term = qs['symbol'][0]
+        hbase = hbasebase.HbaseBase()
+        hbase.connect(get_seed())
+        results = hbase.sym_exists(term)
+        return json.dumps(results)
         # TALK to database here
 
     def GET_search(self, args):
@@ -118,6 +122,10 @@ class hbase:
         if 'term' not in qs:
             return "Error"
         term = qs['term'][0]
+        hbase = hbasebase.HbaseBase()
+        hbase.connect(get_seed())
+        results = hbase.get_symbols_by_partial(term)
+        return json.dumps(results)
         # TALK to database here
 
     def GET_daterange(self, args):
@@ -125,6 +133,10 @@ class hbase:
         if 'term' not in qs:
             return "Error"
         term = qs['term'][0]
+        hbase = hbasebase.hbaseBase()
+        hbase.connect(get_seed())
+        results = hbase.get_date_range_by_sym(term)
+        return json.dumps(results)
         # TALK to database here
 
 class cassandra:
