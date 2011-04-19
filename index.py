@@ -17,7 +17,7 @@ urls = ( '/', 'index',
          '/hbase/(.*)', 'hbase',
          '/mysql', 'mysql',
          '/mysql/(.*)', 'mysql',
-         '/seed', 'seed',
+         '/seed', 'cassandra',
          '/res/(.*)', 'static')
 render = web.template.render('resources/')
 app = web.application(urls, globals())
@@ -29,22 +29,6 @@ request = form.Form (
     form.Button('Request', type="submit")
 )
 
-def get_seed():
-    ip_store = "current_seed.txt"
-    with open(ip_store, "r") as f:
-        return f.read()
-
-def set_seed(ip):
-    ip_store = "current_seed.txt"
-    with open(ip_store, "w") as f:
-        f.write(ip)
-class seed:
-    def GET(self):
-        return get_seed()
-
-    def POST(self):
-        ip_address = web.input()['ip']
-        set_seed(ip_address)
 class index:
     def GET(self):
         return render.index("hi")
@@ -140,6 +124,19 @@ class hbase:
         # TALK to database here
 
 class cassandra:
+    def __init__(self):
+        self.ip_store = "cassandra_seed.txt"
+
+    def save_seed(self, ip):
+        with open(self.ip_store, "w") as f:
+            f.write(ip)
+
+    def POST(self, args):
+        if args is None pr len(args) == 0:
+            return POST_query(args)
+        elif re.match("seed", args):
+            self.POST_seed(args)
+
     def GET(self, args = None):
         # /cassandra or /cassandra/
         if args is None or len(args) == 0:
@@ -155,6 +152,13 @@ class cassandra:
         #/cassandra/symbol/daterange
         elif re.match("symbol/daterange", args):
             self.GET_daterange(args);
+        elif re.match("seed", args):
+            self.GET_seed()
+
+    def GET_seed(self):
+        with open(self.ip_store, "r") as f:
+            return f.read()
+        return get_seed()
 
     def GET_exists(self, args):
         qs = urlparse.parse_qs(web.ctx.query[1:])
@@ -204,8 +208,11 @@ class cassandra:
             12: "Dec",
         }.get(x, "ERROR")
 
+    def POST_seed(self, args):
+        ip_address = web.input()['ip']
+        self.save_seed(ip_address)
 
-    def POST(self):
+    def POST_query(self, args):
         form = request()
         if not form.validates():
             return "Failure. Did you select an option for all the fields?"
