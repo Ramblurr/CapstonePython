@@ -1,8 +1,8 @@
 import settings
-import pybase
-from pybase.htable import *
-from pybase.connection import *
-from hbase.ttypes import *
+import lib.pybase
+from lib.pybase.htable import *
+from lib.pybase.connection import *
+from lib.hbase.ttypes import *
 import uuid
 import pycassa
 from pycassa.system_manager import *
