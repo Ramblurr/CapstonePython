@@ -5,8 +5,8 @@
 """
 import sys
 from nasdaq import parser
+from cassandra import cassandramodel
 import settings
-import cassandrabase
 
 def test_nasdaq():
     config = settings.Settings()
@@ -22,7 +22,7 @@ def test_cassandra():
     cass.test()
 
 def test_insert2():
-    cass = cassandrabase.CassandraBase()
+    cass = cassandramodel.CassandraBase()
     cass.connect()
     config = settings.Settings()
     data_path = config.data_path

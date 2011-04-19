@@ -7,6 +7,7 @@ from datetime import datetime
 from web import form
 from cassandra import cassandramodel
 from hbase import hbasemodel
+import mysqlbase
 from pygooglechart import Chart
 from pygooglechart import SimpleLineChart
 from pygooglechart import Axis
@@ -39,7 +40,7 @@ class mysql:
         # /mysql or /mysql/
         if args is None or len(args) == 0:
             # regular form page
-            return render.hbase("hi")
+            return render.mysql("hi")
         print "GET " +args
         #/mysql/symbol/exists
         if re.match("symbol/exists", args):
@@ -57,7 +58,10 @@ class mysql:
         if 'symbol' not in qs:
             return "Error"
         term = qs['symbol'][0]
-        # TALK to database here
+        msb = mysqlbase.MySqlBase()
+	msb.connect("localhost");
+	results = msb.sym_exists(term);
+	return json.dumps(result);
 
     def GET_search(self, args):
         qs = urlparse.parse_qs(web.ctx.query[1:])
