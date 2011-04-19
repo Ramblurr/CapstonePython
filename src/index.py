@@ -36,22 +36,9 @@ class index:
     def GET(self):
         return render.index("hi")
 
-class mysql:
-    def GET(self, args = None):
-        # /mysql or /mysql/
-        if args is None or len(args) == 0:
-            # regular form page
-            return render.mysql("hi")
-        print "GET " +args
-        #/mysql/symbol/exists
-        if re.match("symbol/exists", args):
-            return self.GET_exists(args)
-        #/mysql/symbol/search
-        elif re.match("symbol/search", args):
-            return self.GET_search(args)
-        #/mysql/symbol/daterange
-        elif re.match("symbol/daterange", args):
-            return self.GET_daterange(args);
+class mysql(dbinterface.DBInterface):
+    def __init__(self):
+        super(mysql, self).__init__(render, "mysql")
 
     def GET_exists(self, args):
         qs = urlparse.parse_qs(web.ctx.query[1:])
@@ -60,9 +47,9 @@ class mysql:
             return "Error"
         term = qs['symbol'][0]
         msb = mysqlmodel.MySqlBase()
-	msb.connect("localhost");
-	results = msb.sym_exists(term);
-	return json.dumps(results);
+        msb.connect("localhost");
+        results = msb.sym_exists(term);
+        return json.dumps(results);
 
     def GET_search(self, args):
         qs = urlparse.parse_qs(web.ctx.query[1:])
@@ -70,38 +57,24 @@ class mysql:
             return "Error"
         term = qs['term'][0]
         msb = mysqlmodel.MySqlBase()
-	msb.connect("localhost");
-	results = msb.get_symbols_by_partial(term)
-	return json.dumps(results)
+        msb.connect("localhost");
+        results = msb.get_symbols_by_partial(term)
+        return json.dumps(results)
 
     def GET_daterange(self, args):
         qs = urlparse.parse_qs(web.ctx.query[1:])
         if 'term' not in qs:
             return "Error"
         term = qs['term'][0]
-	msb = mysqlmodel.MySqlBase()
-	msb.connect("localhost")
-	results = msb.get_date_range_by_sym(term)
-	return json.dumps(results)
+        msb = mysqlmodel.MySqlBase()
+        msb.connect("localhost")
+        results = msb.get_date_range_by_sym(term)
+        return json.dumps(results)
 
-        # TALK to database here
 
-class hbase:
-    def GET(self, args = None):
-        # /hbase or /hbase/
-        if args is None or len(args) == 0:
-            # regular form page
-            return render.hbase("hi")
-        print "GET " +args
-        #/hbase/symbol/exists
-        if re.match("symbol/exists", args):
-            self.GET_exists(args)
-        #/hbase/symbol/search
-        elif re.match("symbol/search", args):
-            self.GET_search(args)
-        #/hbase/symbol/daterange
-        elif re.match("symbol/daterange", args):
-            self.GET_daterange(args);
+class hbase(dbinterface.DBInterface):
+    def __init__(self):
+        super(hbase, self).__init__(render, "hbase")
 
     def GET_exists(self, args):
         qs = urlparse.parse_qs(web.ctx.query[1:])
