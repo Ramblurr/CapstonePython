@@ -1,10 +1,14 @@
 import settings
-import lib.pybase
-from lib.pybase.htable import *
-from lib.pybase.connection import *
-from lib.hbase.ttypes import *
+import pybase
+from pybase.htable import *
+from pybase.connection import *
+from hbase.ttypes import *
 import uuid
 import hbase
+
+schema = { 'Stocks':   [ColumnDescriptor(name='price:'), ColumnDescriptor(name='volume:')],
+    'Dates':    [ColumnDescriptor(name='price:'), ColumnDescriptor(name='volume:')],
+    'Symbols':  [ColumnDescriptor(name='symbol:')] }
 
 #yes
 class HbaseBase(object):
@@ -90,8 +94,8 @@ class HbaseBase(object):
             self.pool = pybase.connect( [host])
             print "connecting to %s" %(host)
 
-        for name in hbase.schema:
-            setattr(self, name.upper(), pybase.HTable(self.pool, name, hbase.schema[name], createIfNotExist=True, overwrite=False))
+        for name in schema:
+            setattr(self, name.upper(), pybase.HTable(self.pool, name, schema[name], createIfNotExist=True, overwrite=False))
 
 #yes
     def insert_batch2(self, parser):

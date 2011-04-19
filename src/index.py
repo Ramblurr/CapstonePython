@@ -5,8 +5,8 @@ import web
 import os, glob, time, json, urlparse, re
 from datetime import datetime
 from web import form
-from cassandra import cassandramodel
-from hbase import hbasemodel
+from cassandramodel import cassandramodel
+from hbasemodel import hbasemodel
 from mysql import mysqlmodel
 from pygooglechart import Chart
 from pygooglechart import SimpleLineChart

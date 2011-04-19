@@ -5,8 +5,8 @@
 """
 import sys
 from nasdaq import parser
-from cassandra import cassandramodel
-from hbase import hbasemodel
+from cassandramodel import cassandramodel
+from hbasemodel import hbasemodel
 import settings
 
 def test_nasdaq():

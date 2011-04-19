@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from connection import *
-from lib.hbase.ttypes import *
+from hbase.ttypes import *
 
 __all__ = ['HTable']
 
