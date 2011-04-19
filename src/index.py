@@ -136,7 +136,7 @@ class cassandra:
         with open(self.ip_store, "w") as f:
             f.write(ip)
 
-    def POST(self, args):
+    def POST(self, args = None):
         if args is None or len(args) == 0:
             return POST_query(args)
         elif re.match("seed", args):
