@@ -4,10 +4,10 @@ Price queries by symbol:
 +----------------+------------------------+
 |                | price:       | volume: |
 +----------------+--------------+---------+
-| <symbol><date> | price:open   |         |
-|                | price:high   |         |
-|                | price:low    |         |
-|                | price:close  |         |
+| <symbol><date> | price_open   |         |
+|                | price_high   |         |
+|                | price_low    |         |
+|                | price_close  |         |
 +----------------+--------------+---------+
 
 Price queries by date:
@@ -16,10 +16,10 @@ Price queries by date:
 +----------------+------------------------+
 |                | price:       | volume: |
 +----------------+--------------+---------+
-| <date><symbol> | price:open   |         |
-|                | price:high   |         |
-|                | price:low    |         |
-|                | price:close  |         |
+| <date><symbol> | price_open   |         |
+|                | price_high   |         |
+|                | price_low    |         |
+|                | price_close  |         |
 +----------------+--------------+---------+
 
 Range queries for symbol names:
@@ -28,8 +28,8 @@ Range queries for symbol names:
 +----------------+-----------------+
 |                | symbol:         |
 +----------------+-----------------+
-| <firstletter>  | symbol:<symbol> |
-|                | symbol:<symbol> |
+| <firstletter>  | symbol_<symbol> |
+|                | symbol_<symbol> |
 +----------------+-----------------+
 
 HBase-shell syntax:
