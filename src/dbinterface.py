@@ -21,14 +21,14 @@ class DBInterface(object):
     def GET(self, args = None):
         self.debug("GET PATH: " + web.ctx.path)
         # legacy seed check for cassandra
-        if name == "cassandra" and re.match("/seed", web.ctx.path):
+        if self.name == "cassandra" and re.match("/seed", web.ctx.path):
             return self.GET_seed()
 
         if args is None or len(args) == 0:
             # regular form page
             # this is the same as calling render.name()
             # e.g., render.cassandra()
-            getattr(self.render, name)("hi")
+            getattr(self.render, self.name)("hi")
         self.debug("GET args: " + args)
         #/dbase/symbol/exists
         if re.match("symbol/exists", args):
