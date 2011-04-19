@@ -132,7 +132,7 @@ class cassandra:
             f.write(ip)
 
     def POST(self, args):
-        if args is None pr len(args) == 0:
+        if args is None or len(args) == 0:
             return POST_query(args)
         elif re.match("seed", args):
             self.POST_seed(args)
