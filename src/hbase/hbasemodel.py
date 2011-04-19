@@ -1,8 +1,8 @@
 import settings
-import lib.pybase
-from lib.pybase.htable import *
-from lib.pybase.connection import *
-from lib.hbase.ttypes import *
+from ..lib import pybase
+from ..lib.pybase.htable import *
+from ..lib.pybase.connection import *
+from ..lib.hbase.ttypes import *
 import uuid
 import hbase
 
