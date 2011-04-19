@@ -55,7 +55,7 @@ class HbaseBase(object):
 #yes
     def get_by_sym_range2(self, sym, start, end):
         print "get_by_sym_range2: start=%s, end=%s" %(start, end)
-        scanner = self.STOCKS2.scanner(sym+start, sym+end, "price")
+        scanner = self.STOCKS.scanner(sym+start, sym+end, "price")
         results = []
         for i in scanner:
             temp = {}
