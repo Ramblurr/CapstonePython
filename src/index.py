@@ -87,7 +87,7 @@ class hbase(dbinterface.DBInterface):
             return "Error"
         term = qs['symbol'][0]
         hbase = hbasemodel.HbaseBase()
-        hbase.connect(get_seed())
+        hbase.connect()
         results = hbase.sym_exists(term)
         return json.dumps(results)
         # TALK to database here
@@ -98,7 +98,7 @@ class hbase(dbinterface.DBInterface):
             return "Error"
         term = qs['term'][0]
         hbase = hbasemodel.HbaseBase()
-        hbase.connect(get_seed())
+        hbase.connect()
         results = hbase.get_symbols_by_partial(term)
         return json.dumps(results)
         # TALK to database here
@@ -109,7 +109,7 @@ class hbase(dbinterface.DBInterface):
             return "Error"
         term = qs['term'][0]
         hbase = hbasemodel.hbaseBase()
-        hbase.connect(get_seed())
+        hbase.connect()
         results = hbase.get_date_range_by_sym(term)
         return json.dumps(results)
         # TALK to database here
