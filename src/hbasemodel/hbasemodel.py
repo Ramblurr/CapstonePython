@@ -49,7 +49,7 @@ class HbaseBase(object):
             dates.append(date)
         range = []
         range.append(dates[0])
-        range.append(dates[len(_dates)-1])
+        range.append(dates[len(dates)-1])
         return range
 
 #yes
@@ -62,7 +62,8 @@ class HbaseBase(object):
             date = i[0].row
             date = date.lstrip(sym)
             temp['date'] = date
-            tcell = i[0].columns
+            tcell = i[0].columns 
+            print tcell
             temp['price_open'] = tcell['price:price_open'].value
             temp['price_high'] = tcell['price:price_high'].value
             temp['price_low'] = tcell['price:price_low'].value
