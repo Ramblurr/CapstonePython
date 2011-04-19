@@ -15,7 +15,7 @@ from thrift.transport import TSocket
 from thrift.protocol import TBinaryProtocol
  
 try:
-    from hbase import Hbase
+    from lib.hbase import Hbase
     #from hbase.ttypes import *
 except:
     from cassandra import Cassandra
