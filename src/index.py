@@ -138,7 +138,7 @@ class cassandra:
 
     def POST(self, args = None):
         if args is None or len(args) == 0:
-            return POST_query(args)
+            return self.POST_query(args)
         elif re.match("seed", args):
             self.POST_seed(args)
 
