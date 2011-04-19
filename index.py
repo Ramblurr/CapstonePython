@@ -142,7 +142,7 @@ class cassandra:
         # /cassandra or /cassandra/
         print "GET PATH: " + web.ctx.path
         # legacy seed check
-        if re.match("/seed", web.ctx.path)
+        if re.match("/seed", web.ctx.path):
             return self.GET_seed()
         if args is None or len(args) == 0:
             # regular form page
