@@ -6,6 +6,7 @@
 import sys
 from nasdaq import parser
 from cassandra import cassandramodel
+from hbase import hbasemodel
 import settings
 
 def test_nasdaq():
@@ -30,7 +31,7 @@ def test_insert2():
     cass.insert_batch2(p)
 
 def test_hbase():
-    hbase = hbasebase.HbaseBase()
+    hbase = hbasemodel.HbaseBase()
     hbase.connect()
     config = settings.Settings()
     data_path = config.data_path
