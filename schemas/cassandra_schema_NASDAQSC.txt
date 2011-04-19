@@ -1,0 +1,6 @@
+connect localhost/9160;
+create keyspace NASDAQ;
+use NASDAQ;
+create column family Stocks with comparator=UTF8Type 
+and column_metadata=[{column_name: symbol, validation_class: UTF8Type, index_type: KEYS}
+{column_name: date, validation_class: LongType, index_type: KEYS}];

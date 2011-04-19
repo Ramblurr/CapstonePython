@@ -1,8 +1,8 @@
 import settings
-import pybase
-from pybase.htable import *
-from pybase.connection import *
-from hbase.ttypes import *
+import lib.pybase
+from lib.pybase.htable import *
+from lib.pybase.connection import *
+from lib.hbase.ttypes import *
 import uuid
 import pycassa
 from pycassa.system_manager import *
@@ -118,11 +118,11 @@ class HbaseBase(object):
             if last != symbol:
                 self.SYMBOLS.insert(symbol[0], sym_changes)
             last = symbol
-      #      if i % 1000 == 0:
-       #         print rec
+            if i % 1000 == 0:
+                print rec
             i += 1
-            if i > 3:
-                return
+       #     if i > 3:
+       #         return
 
 #yes
     def get_by_symbol(self, symbol):  

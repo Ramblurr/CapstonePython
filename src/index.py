@@ -5,8 +5,11 @@ import web
 import os, glob, time, json, urlparse, re
 from datetime import datetime
 from web import form
-import cassandrabase
+
+from cassandra import cassandramodel
+from hbase import hbasemodel
 import mysqlbase
+
 from pygooglechart import Chart
 from pygooglechart import SimpleLineChart
 from pygooglechart import Axis
@@ -18,7 +21,7 @@ urls = ( '/', 'index',
          '/hbase/(.*)', 'hbase',
          '/mysql', 'mysql',
          '/mysql/(.*)', 'mysql',
-         '/seed', 'seed',
+         '/seed', 'cassandra', # legacy code
          '/res/(.*)', 'static')
 render = web.template.render('resources/')
 app = web.application(urls, globals())
@@ -30,22 +33,6 @@ request = form.Form (
     form.Button('Request', type="submit")
 )
 
-def get_seed():
-    ip_store = "current_seed.txt"
-    with open(ip_store, "r") as f:
-        return f.read()
-
-def set_seed(ip):
-    ip_store = "current_seed.txt"
-    with open(ip_store, "w") as f:
-        f.write(ip)
-class seed:
-    def GET(self):
-        return get_seed()
-
-    def POST(self):
-        ip_address = web.input()['ip']
-        set_seed(ip_address)
 class index:
     def GET(self):
         return render.index("hi")
@@ -55,7 +42,7 @@ class mysql:
         # /mysql or /mysql/
         if args is None or len(args) == 0:
             # regular form page
-            return render.hbase("hi")
+            return render.mysql("hi")
         print "GET " +args
         #/mysql/symbol/exists
         if re.match("symbol/exists", args):
@@ -144,21 +131,44 @@ class hbase:
         # TALK to database here
 
 class cassandra:
+    def __init__(self):
+        self.ip_store = "cassandra_seed.txt"
+
+    def save_seed(self, ip):
+        with open(self.ip_store, "w") as f:
+            f.write(ip)
+
+    def POST(self, args):
+        if args is None or len(args) == 0:
+            return POST_query(args)
+        elif re.match("seed", args):
+            self.POST_seed(args)
+
     def GET(self, args = None):
         # /cassandra or /cassandra/
+        print "GET PATH: " + web.ctx.path
+        # legacy seed check
+        if re.match("/seed", web.ctx.path):
+            return self.GET_seed()
         if args is None or len(args) == 0:
             # regular form page
             return render.cassandra("hi")
         print "GET " +args
         #/cassandra/symbol/exists
         if re.match("symbol/exists", args):
-            self.GET_exists(args)
+            return self.GET_exists(args)
         #/cassandra/symbol/search
         elif re.match("symbol/search", args):
-            self.GET_search(args)
+            return self.GET_search(args)
         #/cassandra/symbol/daterange
         elif re.match("symbol/daterange", args):
-            self.GET_daterange(args);
+            return self.GET_daterange(args);
+        elif re.match("seed", args):
+            return self.GET_seed()
+
+    def GET_seed(self):
+        with open(self.ip_store, "r") as f:
+            return f.read()
 
     def GET_exists(self, args):
         qs = urlparse.parse_qs(web.ctx.query[1:])
@@ -208,8 +218,11 @@ class cassandra:
             12: "Dec",
         }.get(x, "ERROR")
 
+    def POST_seed(self, args):
+        ip_address = web.input()['ip']
+        self.save_seed(ip_address)
 
-    def POST(self):
+    def POST_query(self, args):
         form = request()
         if not form.validates():
             return "Failure. Did you select an option for all the fields?"
