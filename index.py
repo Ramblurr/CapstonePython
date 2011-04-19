@@ -139,10 +139,10 @@ class cassandra:
 
     def GET(self, args = None):
         # /cassandra or /cassandra/
-        print "GET " +args
         if args is None or len(args) == 0:
             # regular form page
             return render.cassandra("hi")
+        print "GET " +args
         #/cassandra/symbol/exists
         if re.match("symbol/exists", args):
             return self.GET_exists(args)
