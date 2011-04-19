@@ -28,7 +28,7 @@ class DBInterface(object):
             # regular form page
             # this is the same as calling render.name()
             # e.g., render.cassandra()
-            getattr(self.render, self.name)("hi")
+            return getattr(self.render, self.name)("hi")
         self.debug("GET args: " + args)
         #/dbase/symbol/exists
         if re.match("symbol/exists", args):
