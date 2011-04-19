@@ -6,6 +6,7 @@ import os, glob, time, json, urlparse, re
 from datetime import datetime
 from web import form
 import cassandrabase
+import mysqlbase
 from pygooglechart import Chart
 from pygooglechart import SimpleLineChart
 from pygooglechart import Axis
@@ -72,7 +73,10 @@ class mysql:
         if 'symbol' not in qs:
             return "Error"
         term = qs['symbol'][0]
-        # TALK to database here
+        msb = mysqlbase.MySqlBase()
+	msb.connect("localhost");
+	results = msb.sym_exists(term);
+	return json.dumps(result);
 
     def GET_search(self, args):
         qs = urlparse.parse_qs(web.ctx.query[1:])
