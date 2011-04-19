@@ -71,6 +71,10 @@ class mysql(dbinterface.DBInterface):
         results = msb.get_date_range_by_sym(term)
         return json.dumps(results)
 
+    def POST_query(self, args):
+        # TODO imeplement me - see cassandra's post_query method
+        return "Not implemented yet"
+
 
 class hbase(dbinterface.DBInterface):
     def __init__(self):
@@ -109,6 +113,10 @@ class hbase(dbinterface.DBInterface):
         results = hbase.get_date_range_by_sym(term)
         return json.dumps(results)
         # TALK to database here
+
+    def POST_query(self, args):
+        # TODO imeplement me - see cassandra's post_query method
+        return "Not implemented yet"
 
 class cassandra(dbinterface.DBInterface):
     def __init__(self):
