@@ -1,6 +1,8 @@
+import web, re
 class DBInterface(object):
-    def __init__(self, name):
+    def __init__(self, render, name):
         self.name = name
+        self.render = render
         self.ip_store = "%s_seed.txt" % (name)
 
     def debug(self, msg):
@@ -26,7 +28,7 @@ class DBInterface(object):
             # regular form page
             # this is the same as calling render.name()
             # e.g., render.cassandra()
-            getattr(render, name)("hi")
+            getattr(self.render, name)("hi")
         self.debug("GET args: " + args)
         #/dbase/symbol/exists
         if re.match("symbol/exists", args):
