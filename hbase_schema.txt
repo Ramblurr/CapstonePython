@@ -36,6 +36,6 @@ HBase-shell syntax:
 # Create table Symbols with column families price and volume
 create 'Symbols', 'price', 'volume'
 # Put value in a cell for the price:open column
-put 'Symbols', '<symbol><date>', 'price:open', '42.42'
+put 'Symbols', '<symbol><date>', 'price_open', '42.42'
 # Likewise for the other cells.
 # The apis can abstract this out.
