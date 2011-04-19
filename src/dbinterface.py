@@ -1,6 +1,8 @@
+import web, re
 class DBInterface(object):
-    def __init__(self, name):
+    def __init__(self, render, name):
         self.name = name
+        self.render = render
         self.ip_store = "%s_seed.txt" % (name)
 
     def debug(self, msg):
@@ -19,14 +21,14 @@ class DBInterface(object):
     def GET(self, args = None):
         self.debug("GET PATH: " + web.ctx.path)
         # legacy seed check for cassandra
-        if name == "cassandra" and re.match("/seed", web.ctx.path):
+        if self.name == "cassandra" and re.match("/seed", web.ctx.path):
             return self.GET_seed()
 
         if args is None or len(args) == 0:
             # regular form page
             # this is the same as calling render.name()
             # e.g., render.cassandra()
-            getattr(render, name)("hi")
+            getattr(self.render, self.name)("hi")
         self.debug("GET args: " + args)
         #/dbase/symbol/exists
         if re.match("symbol/exists", args):

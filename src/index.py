@@ -139,7 +139,7 @@ class hbase:
 
 class cassandra(dbinterface.DBInterface):
     def __init__(self):
-        super(cassandra, self).__init__("cassandra")
+        super(cassandra, self).__init__(render, "cassandra")
 
     def GET_exists(self, args):
         qs = urlparse.parse_qs(web.ctx.query[1:])
