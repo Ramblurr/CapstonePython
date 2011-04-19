@@ -39,7 +39,7 @@ class mysql:
         # /mysql or /mysql/
         if args is None or len(args) == 0:
             # regular form page
-            return render.hbase("hi")
+            return render.mysql("hi")
         print "GET " +args
         #/mysql/symbol/exists
         if re.match("symbol/exists", args):
