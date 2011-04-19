@@ -145,23 +145,19 @@ class cassandra:
         print "GET " +args
         #/cassandra/symbol/exists
         if re.match("symbol/exists", args):
-            self.GET_exists(args)
+            return self.GET_exists(args)
         #/cassandra/symbol/search
         elif re.match("symbol/search", args):
-            self.GET_search(args)
+            return self.GET_search(args)
         #/cassandra/symbol/daterange
         elif re.match("symbol/daterange", args):
-            self.GET_daterange(args);
+            return self.GET_daterange(args);
         elif re.match("seed", args):
-            self.GET_seed()
+            return self.GET_seed()
 
     def GET_seed(self):
-        print "GET A SEED :" + self.ip_store
-        ip = ""
         with open(self.ip_store, "r") as f:
-            ip = f.read()
-        print "ip : " + ip
-        return ip
+            return f.read()
 
     def GET_exists(self, args):
         qs = urlparse.parse_qs(web.ctx.query[1:])
