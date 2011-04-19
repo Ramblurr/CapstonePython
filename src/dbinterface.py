@@ -1,7 +1,7 @@
 class DBInterface(object):
     def __init__(self, name):
         self.name = name
-        self.ip_store = "%_seed.txt" % (name)
+        self.ip_store = "%s_seed.txt" % (name)
 
     def debug(self, msg):
         print "%s: %s" % (self.name, msg)
