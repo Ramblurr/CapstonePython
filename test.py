@@ -29,6 +29,14 @@ def test_insert2():
     p = parser.Parser(data_path)
     cass.insert_batch2(p)
 
+def test_hbase():
+    hbase = hbasebase.HbaseBase()
+    hbase.connect()
+    config = settings.Settings()
+    data_path = config.data_path
+    p = parser.Parser(data_path)
+    hbase.insert_batch2(p)
+
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print "usage: test.py cassandra|nasdaq|insert"
