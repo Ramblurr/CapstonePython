@@ -45,37 +45,45 @@ class mysql:
         print "GET " +args
         #/mysql/symbol/exists
         if re.match("symbol/exists", args):
-            self.GET_exists(args)
+            return self.GET_exists(args)
         #/mysql/symbol/search
         elif re.match("symbol/search", args):
-            self.GET_search(args)
+            return self.GET_search(args)
         #/mysql/symbol/daterange
         elif re.match("symbol/daterange", args):
-            self.GET_daterange(args);
+            return self.GET_daterange(args);
 
     def GET_exists(self, args):
         qs = urlparse.parse_qs(web.ctx.query[1:])
-        print "sym exists: %s" %( web.ctx.query[1:])
+        print "sym exists: %s" %(web.ctx.query[1:])
         if 'symbol' not in qs:
             return "Error"
         term = qs['symbol'][0]
-        msb = mysqlbase.MySqlBase()
+        msb = mysqlmodel.MySqlBase()
 	msb.connect("localhost");
 	results = msb.sym_exists(term);
-	return json.dumps(result);
+	return json.dumps(results);
 
     def GET_search(self, args):
         qs = urlparse.parse_qs(web.ctx.query[1:])
         if 'term' not in qs:
             return "Error"
         term = qs['term'][0]
-        # TALK to database here
+        msb = mysqlmodel.MySqlBase()
+	msb.connect("localhost");
+	results = msb.get_symbols_by_partial(term)
+	return json.dumps(results)
 
     def GET_daterange(self, args):
         qs = urlparse.parse_qs(web.ctx.query[1:])
         if 'term' not in qs:
             return "Error"
         term = qs['term'][0]
+	msb = mysqlmodel.MySqlBase()
+	msb.connect("localhost")
+	results = msb.get_date_range_by_sym(term)
+	return json.dumps(results)
+
         # TALK to database here
 
 class hbase:
