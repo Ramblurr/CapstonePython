@@ -108,7 +108,7 @@ class hbase(dbinterface.DBInterface):
         if 'term' not in qs:
             return "Error"
         term = qs['term'][0]
-        hbase = hbasemodel.hbaseBase()
+        hbase = hbasemodel.HbaseBase()
         hbase.connect()
         results = hbase.get_date_range_by_sym(term)
         return json.dumps(results)
