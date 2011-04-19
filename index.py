@@ -18,7 +18,7 @@ urls = ( '/', 'index',
          '/hbase/(.*)', 'hbase',
          '/mysql', 'mysql',
          '/mysql/(.*)', 'mysql',
-         '/seed', 'cassandra',
+         '/seed', 'cassandra', # legacy code
          '/res/(.*)', 'static')
 render = web.template.render('resources/')
 app = web.application(urls, globals())
@@ -140,6 +140,7 @@ class cassandra:
 
     def GET(self, args = None):
         # /cassandra or /cassandra/
+        print "GET PATH: " + web.ctx.path
         if args is None or len(args) == 0:
             # regular form page
             return render.cassandra("hi")
