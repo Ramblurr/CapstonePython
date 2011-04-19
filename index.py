@@ -158,7 +158,10 @@ class cassandra:
     def GET_seed(self):
         print "GET A SEED :" + self.ip_store
         with open(self.ip_store, "r") as f:
-            return f.read()
+            ip = f.read()
+            print "ip : " + ip
+            return ip
+
     def GET_exists(self, args):
         qs = urlparse.parse_qs(web.ctx.query[1:])
         print "sym exists: %s" %( web.ctx.query[1:])
