@@ -43,6 +43,8 @@ if __name__ == "__main__":
         sys.exit(1)
     elif sys.argv[1] == "cassandra":
         test_cassandra()
+    elif sys.argv[1] == "hbase":
+	test_hbase()
     elif sys.argv[1] == "nasdaq":
         test_nasdaq()
     elif sys.argv[1] == "insert2":
