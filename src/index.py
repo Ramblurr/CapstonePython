@@ -11,6 +11,7 @@ from mysql import mysqlmodel
 from pygooglechart import Chart
 from pygooglechart import SimpleLineChart
 from pygooglechart import Axis
+import dbinterface
 
 urls = ( '/', 'index',
          '/cassandra', 'cassandra',
@@ -108,7 +109,7 @@ class hbase:
         if 'symbol' not in qs:
             return "Error"
         term = qs['symbol'][0]
-        hbase = hbasebase.HbaseBase()
+        hbase = hbasemodel.HbaseBase()
         hbase.connect(get_seed())
         results = hbase.sym_exists(term)
         return json.dumps(results)
@@ -119,7 +120,7 @@ class hbase:
         if 'term' not in qs:
             return "Error"
         term = qs['term'][0]
-        hbase = hbasebase.HbaseBase()
+        hbase = hbasemodel.HbaseBase()
         hbase.connect(get_seed())
         results = hbase.get_symbols_by_partial(term)
         return json.dumps(results)
@@ -130,51 +131,15 @@ class hbase:
         if 'term' not in qs:
             return "Error"
         term = qs['term'][0]
-        hbase = hbasebase.hbaseBase()
+        hbase = hbasemodel.hbaseBase()
         hbase.connect(get_seed())
         results = hbase.get_date_range_by_sym(term)
         return json.dumps(results)
         # TALK to database here
 
-class cassandra:
+class cassandra(dbinterface.DBInterface):
     def __init__(self):
-        self.ip_store = "cassandra_seed.txt"
-
-    def save_seed(self, ip):
-        with open(self.ip_store, "w") as f:
-            f.write(ip)
-
-    def POST(self, args):
-        if args is None or len(args) == 0:
-            return POST_query(args)
-        elif re.match("seed", args):
-            self.POST_seed(args)
-
-    def GET(self, args = None):
-        # /cassandra or /cassandra/
-        print "GET PATH: " + web.ctx.path
-        # legacy seed check
-        if re.match("/seed", web.ctx.path):
-            return self.GET_seed()
-        if args is None or len(args) == 0:
-            # regular form page
-            return render.cassandra("hi")
-        print "GET " +args
-        #/cassandra/symbol/exists
-        if re.match("symbol/exists", args):
-            return self.GET_exists(args)
-        #/cassandra/symbol/search
-        elif re.match("symbol/search", args):
-            return self.GET_search(args)
-        #/cassandra/symbol/daterange
-        elif re.match("symbol/daterange", args):
-            return self.GET_daterange(args);
-        elif re.match("seed", args):
-            return self.GET_seed()
-
-    def GET_seed(self):
-        with open(self.ip_store, "r") as f:
-            return f.read()
+        super(cassandra, self).__init__("cassandra")
 
     def GET_exists(self, args):
         qs = urlparse.parse_qs(web.ctx.query[1:])
@@ -183,7 +148,7 @@ class cassandra:
             return "Error"
         term = qs['symbol'][0]
         cass = cassandramodel.CassandraBase()
-        cass.connect(get_seed())
+        cass.connect(self.GET_seed())
         results = cass.sym_exists(term)
         return json.dumps(results)
 
@@ -193,7 +158,7 @@ class cassandra:
             return "Error"
         term = qs['term'][0]
         cass = cassandramodel.CassandraBase()
-        cass.connect(get_seed())
+        cass.connect(self.GET_seed())
         results = cass.get_symbols_by_partial(term)
         return json.dumps(results)
 
@@ -203,7 +168,7 @@ class cassandra:
             return "Error"
         term = qs['term'][0]
         cass = cassandramodel.CassandraBase()
-        cass.connect(get_seed())
+        cass.connect(self.GET_seed())
         results = cass.get_date_range_by_sym(term)
         return json.dumps(results)
 
@@ -242,7 +207,7 @@ class cassandra:
         end = datetime.strptime(end_string, date_format).strftime("%Y-%m-%d")
 
         cass = cassandramodel.CassandraBase()
-        cass.connect(get_seed())
+        cass.connect(self.GET_seed())
 
         start_time = time.time()
         records = cass.get_by_sym_range2(sym, start, end)
