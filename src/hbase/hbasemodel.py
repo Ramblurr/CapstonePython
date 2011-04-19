@@ -4,9 +4,7 @@ from lib.pybase.htable import *
 from lib.pybase.connection import *
 from lib.hbase.ttypes import *
 import uuid
-import pycassa
-from pycassa.system_manager import *
-from pycassa.index import *
+import hbase
 
 #yes
 class HbaseBase(object):
@@ -75,7 +73,7 @@ class HbaseBase(object):
         key = partial[0]
         last = partial[len(partial)-1]
         before = partial
-        after = partial + "Z"
+        after = partial + "ZZZZZ"
         scanner = self.SYMBOLS.scanner(key, "symbol")
         for i in scanner:
             tcell = i[0].columns
@@ -88,16 +86,12 @@ class HbaseBase(object):
         if host is None:
             self.pool = pybase.connect([self.config.host])
             print "connecting to %s" %(self.config.host)
-            self.STOCKS = pybase.HTable(self.pool, "Stocks", [ColumnDescriptor(name='price:'), ColumnDescriptor(name='volume:')])
-            self.DATES = pybase.HTable(self.pool, "Dates", [ColumnDescriptor(name='price:'), ColumnDescriptor(name='volume:')])
-            self.SYMBOLS = pybase.HTable(self.pool, "Symbols", [ColumnDescriptor(name='symbol:')])
-
         else:
             self.pool = pybase.connect( [host])
             print "connecting to %s" %(host)
-            self.STOCKS = pybase.HTable(self.pool, "Stocks", [ColumnDescriptor(name='price:'), ColumnDescriptor(name='volume:')])
-            self.DATES = pybase.HTable(self.pool, "Dates", [ColumnDescriptor(name='price:'), ColumnDescriptor(name='volume:')])
-            self.SYMBOLS = pybase.HTable(self.pool, "Symbols", [ColumnDescriptor(name='symbol:')])
+
+        for name in hbase.schema:
+            setattr(self, name.upper(), pybase.HTable(self.pool, name, hbase.schema[name], createIfNotExist=True, overwrite=False))
 
 #yes
     def insert_batch2(self, parser):
@@ -121,12 +115,10 @@ class HbaseBase(object):
             if i % 1000 == 0:
                 print rec
             i += 1
-       #     if i > 3:
-       #         return
 
 #yes
     def get_by_symbol(self, symbol):  
-        scanner = self.STOCKS2.scanner(sym, "price")
+        scanner = self.STOCKS.scanner(sym, "price")
         results = []
         for i in scanner:
             temp = {}
