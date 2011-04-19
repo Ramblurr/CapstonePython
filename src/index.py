@@ -7,7 +7,7 @@ from datetime import datetime
 from web import form
 from cassandra import cassandramodel
 from hbase import hbasemodel
-import mysqlbase
+from mysql import mysqlmodel
 from pygooglechart import Chart
 from pygooglechart import SimpleLineChart
 from pygooglechart import Axis
