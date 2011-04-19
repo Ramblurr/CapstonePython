@@ -81,7 +81,9 @@ class HbaseBase(object):
         scanner = self.SYMBOLS.scanner(key, "symbol")
         for i in scanner:
             tcell = i[0].columns
-            result = tcell.__repr__()
+            print i
+            print tcell
+            result = tcell.__repr__
             return result.values()
             
 
