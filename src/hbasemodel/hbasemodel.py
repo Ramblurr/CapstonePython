@@ -80,12 +80,11 @@ class HbaseBase(object):
         after = partial + "ZZZZZ"
         scanner = self.SYMBOLS.scanner(key, "symbol")
         for i in scanner:
-            tcell = i[0].columns
-            print i
-            print tcell
-            result = tcell.__repr__
-            return result.values()
-            
+            results = i[0].columns
+            list = []
+            for tcell in results.values():
+                list.append( tcell.value )
+            return list
 
 #yes
     def connect(self, host=None):
