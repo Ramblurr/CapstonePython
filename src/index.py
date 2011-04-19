@@ -11,6 +11,7 @@ from mysql import mysqlmodel
 from pygooglechart import Chart
 from pygooglechart import SimpleLineChart
 from pygooglechart import Axis
+import dbinterface
 
 urls = ( '/', 'index',
          '/cassandra', 'cassandra',
@@ -128,45 +129,9 @@ class hbase:
         return json.dumps(results)
         # TALK to database here
 
-class cassandra:
+class cassandra(dbinterface.DBInterface):
     def __init__(self):
-        self.ip_store = "cassandra_seed.txt"
-
-    def save_seed(self, ip):
-        with open(self.ip_store, "w") as f:
-            f.write(ip)
-
-    def POST(self, args = None):
-        if args is None or len(args) == 0:
-            return self.POST_query(args)
-        elif re.match("seed", args):
-            self.POST_seed(args)
-
-    def GET(self, args = None):
-        # /cassandra or /cassandra/
-        print "GET PATH: " + web.ctx.path
-        # legacy seed check
-        if re.match("/seed", web.ctx.path):
-            return self.GET_seed()
-        if args is None or len(args) == 0:
-            # regular form page
-            return render.cassandra("hi")
-        print "GET " +args
-        #/cassandra/symbol/exists
-        if re.match("symbol/exists", args):
-            return self.GET_exists(args)
-        #/cassandra/symbol/search
-        elif re.match("symbol/search", args):
-            return self.GET_search(args)
-        #/cassandra/symbol/daterange
-        elif re.match("symbol/daterange", args):
-            return self.GET_daterange(args);
-        elif re.match("seed", args):
-            return self.GET_seed()
-
-    def GET_seed(self):
-        with open(self.ip_store, "r") as f:
-            return f.read()
+        super().__init__("cassandra")
 
     def GET_exists(self, args):
         qs = urlparse.parse_qs(web.ctx.query[1:])
