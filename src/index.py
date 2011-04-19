@@ -174,7 +174,7 @@ class cassandra:
         if 'symbol' not in qs:
             return "Error"
         term = qs['symbol'][0]
-        cass = cassandrabase.CassandraBase()
+        cass = cassandramodel.CassandraBase()
         cass.connect(get_seed())
         results = cass.sym_exists(term)
         return json.dumps(results)
@@ -184,7 +184,7 @@ class cassandra:
         if 'term' not in qs:
             return "Error"
         term = qs['term'][0]
-        cass = cassandrabase.CassandraBase()
+        cass = cassandramodel.CassandraBase()
         cass.connect(get_seed())
         results = cass.get_symbols_by_partial(term)
         return json.dumps(results)
@@ -194,7 +194,7 @@ class cassandra:
         if 'term' not in qs:
             return "Error"
         term = qs['term'][0]
-        cass = cassandrabase.CassandraBase()
+        cass = cassandramodel.CassandraBase()
         cass.connect(get_seed())
         results = cass.get_date_range_by_sym(term)
         return json.dumps(results)
@@ -233,7 +233,7 @@ class cassandra:
         start = datetime.strptime(start_string, date_format).strftime("%Y-%m-%d")
         end = datetime.strptime(end_string, date_format).strftime("%Y-%m-%d")
 
-        cass = cassandrabase.CassandraBase()
+        cass = cassandramodel.CassandraBase()
         cass.connect(get_seed())
 
         start_time = time.time()
