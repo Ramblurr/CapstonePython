@@ -115,8 +115,36 @@ class hbase(dbinterface.DBInterface):
         # TALK to database here
 
     def POST_query(self, args):
-        # TODO imeplement me - see cassandra's post_query method
-        return "Not implemented yet"
+        form = request()
+        if not form.validates():
+            return "Failure. Did you select an option for all the fields?"
+        sym = form['symbol'].value
+        start_string = form['startdate'].value
+        end_string = form['enddate'].value
+
+
+        date_format = "%Y-%m-%d"
+        start = datetime.strptime(start_string, date_format).strftime("%Y-%m-%d")
+        end = datetime.strptime(end_string, date_format).strftime("%Y-%m-%d")
+
+        hbase = hbasemodel.HbaseBase()
+        hbase.connect()
+
+        start_time = time.time()
+        records = hbase.get_by_sym_range2(sym, start, end)
+        if len(records) == 0:
+            message = "Zero records returned. Perhaps the date range is incorrect?"
+            return render.error(message)
+        records_unsorted = []
+        self.debug("number records: %s" %(len(records)))
+        for r in records:
+            temp = r[1]
+            temp['date'] = datetime.strptime(str(temp['date']), "%Y-%m-%d")
+            records_unsorted.append(temp)
+
+        records_processed = sorted(records_unsorted, key = lambda k: k['date'])
+        elapsed_time = (time.time() - start_time)
+        return render.results(sym, records_processed, elapsed_time, "")
 
 class cassandra(dbinterface.DBInterface):
     def __init__(self):
