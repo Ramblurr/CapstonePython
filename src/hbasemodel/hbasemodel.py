@@ -55,7 +55,7 @@ class HbaseBase(object):
 #yes
     def get_by_sym_range2(self, sym, start, end):
         print "get_by_sym_range2: start=%s, end=%s" %(start, end)
-        scanner = self.STOCKS.scanner(sym+start, sym+end, "price")
+        scanner = self.STOCKS.scanner(sym+start, sym+end+"A", "price")
         results = []
         for i in scanner:
             temp = {}
@@ -78,7 +78,7 @@ class HbaseBase(object):
         key = partial[0]
         last = partial[len(partial)-1]
         before = partial
-        after = partial + "ZZZZZ"
+        after = partial + "ZZZZZ" # Assuming symbol <5 chars long, end is non-inclusive
         scanner = self.SYMBOLS.scanner(key, "symbol")
         for i in scanner:
             results = i[0].columns
@@ -97,7 +97,7 @@ class HbaseBase(object):
             print "connecting to %s" %(host)
 
         for name in schema:
-            setattr(self, name.upper(), pybase.HTable(self.pool, name, schema[name])) #, createIfNotExist=True, overwrite=False))
+            setattr(self, name.upper(), pybase.HTable(self.pool, name, schema[name])), createIfNotExist=True, overwrite=False))
 
 #yes
     def insert_batch2(self, parser):
@@ -108,9 +108,12 @@ class HbaseBase(object):
             date = rec['date']
             symboldate = symbol+date
             datesymbol = date+symbol
-            #del rec['symbol']
-            #del rec['date']
-            changes = {'price:price_open':rec['price_open'], 'price:price_high':rec['price_high'], 'price:price_low':rec['price_low'], 'price:price_close':rec['price_close'], 'price:price_adj_close':rec['price_adj_close']}
+            
+            changes = {}
+            fields = ['price_open', 'price_high', 'price_low', 'price_close', 'price_adj_close']
+            for field in fields:
+                changes['price:' + field] = rec[field]
+            
             sym_columnname = 'symbol:symbol_' + rec['symbol']
             sym_changes = {sym_columnname:rec['symbol']}
             self.STOCKS.insert(symboldate, changes)
