@@ -7,7 +7,7 @@ from datetime import datetime
 from web import form
 from cassandramodel import cassandramodel
 from hbasemodel import hbasemodel
-from mysql import mysqlmodel
+from mysqlmodel import mysqlmodel
 from pygooglechart import Chart
 from pygooglechart import SimpleLineChart
 from pygooglechart import Axis
@@ -72,9 +72,120 @@ class mysql(dbinterface.DBInterface):
         return json.dumps(results)
 
     def POST_query(self, args):
-        # TODO imeplement me - see cassandra's post_query method
-        return "Not implemented yet"
+        form = request()
+        if not form.validates():
+            return "Failure. Did you select an option for all the fields?"
+        sym = form['symbol'].value
+        start_string = form['startdate'].value
+        end_string = form['enddate'].value
 
+        date_format = "%Y-%m-%d"
+        start = datetime.strptime(start_string, date_format).strftime("%Y-%m-%d")
+        end = datetime.strptime(end_string, date_format).strftime("%Y-%m-%d")
+
+        msb = mysqlmodel.MySqlBase()
+        msb.connect("localhost")
+
+        start_time = time.time()
+        records = msb.get_by_sym_range2(sym, start, end)
+        if len(records) == 0:
+            message = "Zero records returned. Perhaps the date range is incorrect?"
+            return render.error(message)
+        records_unsorted = []
+        print "number records: %s" %(len(records))
+        for r in records:
+	    temp = r
+            temp['date'] = datetime.strptime(str(temp['date']), "%Y-%m-%d")
+            records_unsorted.append(temp)
+
+        records_processed = sorted(records_unsorted, key = lambda k: k['date'])
+        elapsed_time = (time.time() - start_time)
+
+        y_max = 0.0
+        y_min = 0.0
+        data = []
+        for q in records_processed:
+            temp = float(q['price_adj_close'])
+            data.append(temp)
+            if temp > y_max:
+                y_max = temp
+
+        y_min = y_max
+
+        for d in records_processed:
+            temp = float(d['price_adj_close'])
+            if temp <  y_min:
+                y_min = temp
+
+        difference = float(y_max - y_min)
+        difference = float(difference/2)
+
+        y_min_foo = y_min-difference
+        y_max_foo = y_max+difference
+
+        if y_min_foo < 0:
+            y_min_foo = 0
+
+        chart = SimpleLineChart(1000, 300, y_range=[y_min_foo, y_max_foo])
+
+        chart.add_data(data)
+        chart.set_colours(['0000FF'])
+#	chart.fill_linear_stripes(Chart.CHART, 0, 'CCCCCC', 0.1, 'FFFFFF', 0.2)
+#	chart.set_grid(0, 25, 5, 5)
+
+#	y_max_output = y_max + difference
+#	left_axis = range(y_min_foo, y_max_foo, 1.00)
+#	left_axis[0] = y_min
+
+        left_axis = []
+        label = y_min_foo
+        delta_y = 1.00
+        derp = float(y_max_foo - y_min_foo)
+#	if derp > 15.0:
+        delta_y = derp/(10.00)
+
+        while y_min_foo < y_max_foo:
+            left_axis.append(y_min_foo)
+            y_min_foo = y_min_foo + delta_y
+
+        if len(left_axis) < 10:
+            left_axis.append(y_min_foo)
+
+        lines = len(left_axis)-1
+        chart.set_grid(0, lines, 1, 1)
+
+        x_labels = []
+
+        for t in records_processed:
+            label = (self.getMonth(t['date'].month ), t['date'].year)
+            if not label in x_labels:
+                x_labels.append( label )
+
+        chart.set_axis_labels(Axis.LEFT, left_axis)
+        chart.set_axis_labels(Axis.BOTTOM, x_labels)
+        list_len = float(len(x_labels))
+        top = float(1)
+        stripe_len = float(top /list_len)
+        chart.fill_linear_stripes(Chart.CHART, 0, 'CCCCCC', stripe_len, 'FFFFFF', stripe_len)
+        imgURL = chart.get_url()
+
+        return render.results(sym, records_processed, elapsed_time, imgURL)
+
+    def getMonth(self, x):
+        return {
+            1: "Jan",
+            2: "Feb",
+            3: "Mar",
+            4: "Apr",
+            5: "May",
+            6: "Jun",
+            7: "Jul",
+            8: "Aug",
+            9: "Sep",
+            10: "Oct",
+            11: "Nov",
+            12: "Dec",
+        }.get(x, "ERROR")
 
 class hbase(dbinterface.DBInterface):
     def __init__(self):
@@ -209,7 +320,6 @@ class cassandra(dbinterface.DBInterface):
         sym = form['symbol'].value
         start_string = form['startdate'].value
         end_string = form['enddate'].value
-
 
         date_format = "%Y-%m-%d"
         start = datetime.strptime(start_string, date_format).strftime("%Y-%m-%d")
