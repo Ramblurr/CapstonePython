@@ -97,7 +97,7 @@ class HbaseBase(object):
             print "connecting to %s" %(host)
 
         for name in schema:
-            setattr(self, name.upper(), pybase.HTable(self.pool, name, schema[name])), createIfNotExist=True, overwrite=True))
+            setattr(self, name.upper(), pybase.HTable(self.pool, name, schema[name], createIfNotExist=True, overwrite=False))
 
 #yes
     def insert_batch2(self, parser):
