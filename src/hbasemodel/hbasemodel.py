@@ -121,6 +121,8 @@ class HbaseBase(object):
             if i % 1000 == 0:
                 print rec
             i += 1
+            if i > 5:
+                return
 
 #yes
     def get_by_symbol(self, symbol):  
