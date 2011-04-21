@@ -1,10 +1,14 @@
 import settings
-import lib.pybase
-from lib.pybase.htable import *
-from lib.pybase.connection import *
-from lib.hbase.ttypes import *
+import pybase
+from pybase.htable import *
+from pybase.connection import *
+from hbase.ttypes import *
 import uuid
 import hbase
+
+schema = { 'Stocks':   [ColumnDescriptor(name='price:'), ColumnDescriptor(name='volume:')],
+    'Dates':    [ColumnDescriptor(name='price:'), ColumnDescriptor(name='volume:')],
+    'Symbols':  [ColumnDescriptor(name='symbol:')] }
 
 #yes
 class HbaseBase(object):
@@ -45,20 +49,21 @@ class HbaseBase(object):
             dates.append(date)
         range = []
         range.append(dates[0])
-        range.append(dates[len(_dates)-1])
+        range.append(dates[len(dates)-1])
         return range
 
 #yes
     def get_by_sym_range2(self, sym, start, end):
         print "get_by_sym_range2: start=%s, end=%s" %(start, end)
-        scanner = self.STOCKS2.scanner(sym+start, sym+end, "price")
+        scanner = self.STOCKS.scanner(sym+start, sym+end+"A", "price")
         results = []
         for i in scanner:
             temp = {}
             date = i[0].row
             date = date.lstrip(sym)
             temp['date'] = date
-            tcell = i[0].columns
+            tcell = i[0].columns 
+            print tcell
             temp['price_open'] = tcell['price:price_open'].value
             temp['price_high'] = tcell['price:price_high'].value
             temp['price_low'] = tcell['price:price_low'].value
@@ -73,13 +78,14 @@ class HbaseBase(object):
         key = partial[0]
         last = partial[len(partial)-1]
         before = partial
-        after = partial + "ZZZZZ"
+        after = partial + "ZZZZZ" # Assuming symbol <5 chars long, end is non-inclusive
         scanner = self.SYMBOLS.scanner(key, "symbol")
         for i in scanner:
-            tcell = i[0].columns
-            result = tcell.__repr__()
-            return result.values()
-            
+            results = i[0].columns
+            list = []
+            for tcell in results.values():
+                list.append( tcell.value )
+            return list
 
 #yes
     def connect(self, host=None):
@@ -90,8 +96,8 @@ class HbaseBase(object):
             self.pool = pybase.connect( [host])
             print "connecting to %s" %(host)
 
-        for name in hbase.schema:
-            setattr(self, name.upper(), pybase.HTable(self.pool, name, hbase.schema[name], createIfNotExist=True, overwrite=False))
+        for name in schema:
+            setattr(self, name.upper(), pybase.HTable(self.pool, name, schema[name])), createIfNotExist=True, overwrite=False))
 
 #yes
     def insert_batch2(self, parser):
@@ -102,9 +108,12 @@ class HbaseBase(object):
             date = rec['date']
             symboldate = symbol+date
             datesymbol = date+symbol
-            #del rec['symbol']
-            #del rec['date']
-            changes = {'price:price_open':rec['price_open'], 'price:price_high':rec['price_high'], 'price:price_low':rec['price_low'], 'price:price_close':rec['price_close'], 'price:price_adj_close':rec['price_adj_close']}
+            
+            changes = {}
+            fields = ['price_open', 'price_high', 'price_low', 'price_close', 'price_adj_close']
+            for field in fields:
+                changes['price:' + field] = rec[field]
+            
             sym_columnname = 'symbol:symbol_' + rec['symbol']
             sym_changes = {sym_columnname:rec['symbol']}
             self.STOCKS.insert(symboldate, changes)
