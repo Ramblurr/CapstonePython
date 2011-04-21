@@ -55,7 +55,11 @@ class HbaseBase(object):
 #yes
     def get_by_sym_range2(self, sym, start, end):
         print "get_by_sym_range2: start=%s, end=%s" %(start, end)
+<<<<<<< HEAD
+        scanner = self.STOCKS.scanner(sym+start, sym+end, "price")
+=======
         scanner = self.STOCKS.scanner(sym+start, sym+end+"A", "price")
+>>>>>>> da556aea693dd47f0815b4d373dffe3ec1446bb4
         results = []
         for i in scanner:
             temp = {}
@@ -97,7 +101,7 @@ class HbaseBase(object):
             print "connecting to %s" %(host)
 
         for name in schema:
-            setattr(self, name.upper(), pybase.HTable(self.pool, name, schema[name], createIfNotExist=True, overwrite=False))
+            setattr(self, name.upper(), pybase.HTable(self.pool, name, schema[name])) #, createIfNotExist=True, overwrite=False))
 
 #yes
     def insert_batch2(self, parser):
