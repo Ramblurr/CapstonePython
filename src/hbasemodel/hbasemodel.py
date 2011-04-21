@@ -31,14 +31,12 @@ class HbaseBase(object):
         print "sym exists: " + sym
         key = sym[0]
         records = 0
-        scanner = self.STOCKS.scanner(sym, "price")
+        scanner = self.SYMBOLS.scanner(key, "symbol")
         for i in scanner:
-            records = records + 1
-        if records > 0:
-            return True
-        if records == 0:
-            return False
-
+            for tcell in i[0].columns.values():
+                if tcell.value.upper() == sym:
+                    return True
+        return False
 #yes
     def get_date_range_by_sym(self, sym):
         scanner = self.STOCKS.scanner(sym, "price")
@@ -84,8 +82,10 @@ class HbaseBase(object):
             results = i[0].columns
             list = []
             for tcell in results.values():
-                list.append( tcell.value )
-            return list
+                if tcell.value < after and tcell.value > before:
+			list.append( tcell.value )
+            
+	    return sorted(list)
 
 #yes
     def connect(self, host=None):
@@ -97,7 +97,7 @@ class HbaseBase(object):
             print "connecting to %s" %(host)
 
         for name in schema:
-            setattr(self, name.upper(), pybase.HTable(self.pool, name, schema[name], createIfNotExist=True, overwrite=False))
+            setattr(self, name.upper(), pybase.HTable(self.pool, name, schema[name]))#, createIfNotExist=True, overwrite=False))
 
 #yes
     def insert_batch2(self, parser):
