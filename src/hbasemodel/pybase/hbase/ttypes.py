@@ -654,6 +654,14 @@ class IOError(Exception):
   def __ne__(self, other):
     return not (self == other)
 
+  def _get_message(self): 
+    return self._message
+
+  def _set_message(self, message): 
+    self._message = message
+
+  message = property(_get_message, _set_message)
+
 class IllegalArgument(Exception):
   """
   An IllegalArgument exception indicates an illegal or invalid
@@ -716,6 +724,14 @@ class IllegalArgument(Exception):
   def __ne__(self, other):
     return not (self == other)
 
+  def _get_message(self): 
+    return self._message
+
+  def _set_message(self, message): 
+    self._message = message
+
+  message = property(_get_message, _set_message)
+
 class AlreadyExists(Exception):
   """
   An AlreadyExists exceptions signals that a table with the specified
@@ -777,4 +793,12 @@ class AlreadyExists(Exception):
 
   def __ne__(self, other):
     return not (self == other)
+
+  def _get_message(self): 
+    return self._message
+
+  def _set_message(self, message): 
+    self._message = message
+
+  message = property(_get_message, _set_message)
 
