@@ -42,12 +42,11 @@ class HbaseBase(object):
         return False
 #yes
     def get_date_range_by_sym(self, sym):
-        end = sym+"ZZZZZZZZZZ"
-        scanner = self.STOCKS.scanner(sym, end)
+        scanner = self.STOCKS.scanner(get_range_start(sym), sym+DATE_DELIM+'Z')
         dates = []
         for i in scanner:
             date = i[0].row
-            date = date.lstrip(sym)
+            date = date.lstrip(sym+DATE_DELIM)
             dates.append(date)
         range = []
         range.append(dates[0])
@@ -57,15 +56,14 @@ class HbaseBase(object):
 #yes
     def get_by_sym_range2(self, sym, start, end):
         print "get_by_sym_range2: start=%s, end=%s" %(start, end)
-        scanner = self.STOCKS.scanner(sym+DATE_DELIM+start, sym+DATE_DELIM+end+'Z')
+        scanner = self.STOCKS.scanner(sym+DATE_DELIM+start, sym+DATE_DELIM+end)
         results = []
         for i in scanner:
             temp = {}
             date = i[0].row
-            date = date.lstrip(sym)
+            date = date.lstrip(sym+DATE_DELIM)
             temp['date'] = date
             tcell = i[0].columns 
-            print tcell
             temp['price_open'] = tcell['price:price_open'].value
             temp['price_high'] = tcell['price:price_high'].value
             temp['price_low'] = tcell['price:price_low'].value
@@ -136,7 +134,7 @@ class HbaseBase(object):
         for i in scanner:
             temp = {}
             date = i[0].row
-            date = date.lstrip(sym)
+            date = date.lstrip(sym+DATE_DELIM)
             temp['date'] = date
             tcell = i[0].columns
             temp['price_open'] = tcell['price:price_open'].value
@@ -151,4 +149,4 @@ def get_range_start(s):
     return s + DATE_DELIM
 
 def get_range_end(s):
-    return s + chr(ord(DATE_DELIM) + 1)
+    return s + DATE_DELIM + "ZZZZZ"
