@@ -19,7 +19,8 @@ class HbaseBase(object):
         print sys.getTableNames()
 #yes
     def get_record(self, sym):
-        it = self.STOCKS.scanner(sym, "price")
+        end = sym + "ZZZZZ"
+        it = self.STOCKS.scanner(sym, end)
         for i in it:
             tcell = i[0].columns
             open = tcell['price:price_open'].value
@@ -39,7 +40,8 @@ class HbaseBase(object):
         return False
 #yes
     def get_date_range_by_sym(self, sym):
-        scanner = self.STOCKS.scanner(sym, "price")
+        end = sym+"ZZZZZ"
+        scanner = self.STOCKS.scanner(sym, end)
         dates = []
         for i in scanner:
             date = i[0].row
@@ -53,7 +55,7 @@ class HbaseBase(object):
 #yes
     def get_by_sym_range2(self, sym, start, end):
         print "get_by_sym_range2: start=%s, end=%s" %(start, end)
-        scanner = self.STOCKS.scanner(sym+start, sym+end+"A", "price")
+        scanner = self.STOCKS.scanner(sym+start, sym+end)
         results = []
         for i in scanner:
             temp = {}
@@ -66,7 +68,7 @@ class HbaseBase(object):
             temp['price_high'] = tcell['price:price_high'].value
             temp['price_low'] = tcell['price:price_low'].value
             temp['price_close'] = tcell['price:price_close'].value
-            temp['price_adj_close'] = tecell['price:price_adj_close'].value
+            temp['price_adj_close'] = tcell['price:price_adj_close'].value
             results.append(temp)
         return results
 
@@ -77,15 +79,14 @@ class HbaseBase(object):
         last = partial[len(partial)-1]
         before = partial
         after = partial + "ZZZZZ" # Assuming symbol <5 chars long, end is non-inclusive
-        scanner = self.SYMBOLS.scanner(key, "symbol")
+        scanner = self.SYMBOLS.scanner(key, after)
         for i in scanner:
             results = i[0].columns
             list = []
             for tcell in results.values():
                 if tcell.value < after and tcell.value > before:
-			list.append( tcell.value )
-            
-	    return sorted(list)
+                    list.append( tcell.value )
+            return sorted(list)
 
 #yes
     def connect(self, host=None):
@@ -123,11 +124,13 @@ class HbaseBase(object):
             last = symbol
             if i % 1000 == 0:
                 print rec
+            
             i += 1
 
 #yes
-    def get_by_symbol(self, symbol):  
-        scanner = self.STOCKS.scanner(sym, "price")
+    def get_by_symbol(self, sym): 
+        end = sym + "ZZZZZZ"
+        scanner = self.STOCKS.scanner(sym, end)
         results = []
         for i in scanner:
             temp = {}
@@ -139,6 +142,6 @@ class HbaseBase(object):
             temp['price_high'] = tcell['price:price_high'].value
             temp['price_low'] = tcell['price:price_low'].value
             temp['price_close'] = tcell['price:price_close'].value
-            temp['price_adj_close'] = tecell['price:price_adj_close'].value
+            temp['price_adj_close'] = tcell['price:price_adj_close'].value
             results.append(temp)
         return results
