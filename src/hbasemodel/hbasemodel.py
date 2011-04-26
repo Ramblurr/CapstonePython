@@ -10,6 +10,8 @@ schema = { 'Stocks':   [ColumnDescriptor(name='price:'), ColumnDescriptor(name='
     'Dates':    [ColumnDescriptor(name='price:'), ColumnDescriptor(name='volume:')],
     'Symbols':  [ColumnDescriptor(name='symbol:')] }
 
+DATE_DELIM = '-'
+
 #yes
 class HbaseBase(object):
     def __init__(self):
@@ -19,7 +21,7 @@ class HbaseBase(object):
         print sys.getTableNames()
 #yes
     def get_record(self, sym):
-        end = sym + "ZZZZZ"
+        end = get_range_end(sym)
         it = self.STOCKS.scanner(sym, end)
         for i in it:
             tcell = i[0].columns
@@ -40,7 +42,7 @@ class HbaseBase(object):
         return False
 #yes
     def get_date_range_by_sym(self, sym):
-        end = sym+"ZZZZZ"
+        end = sym+"ZZZZZZZZZZ"
         scanner = self.STOCKS.scanner(sym, end)
         dates = []
         for i in scanner:
@@ -55,7 +57,7 @@ class HbaseBase(object):
 #yes
     def get_by_sym_range2(self, sym, start, end):
         print "get_by_sym_range2: start=%s, end=%s" %(start, end)
-        scanner = self.STOCKS.scanner(sym+start, sym+end)
+        scanner = self.STOCKS.scanner(sym+DATE_DELIM+start, sym+DATE_DELIM+end+'Z')
         results = []
         for i in scanner:
             temp = {}
@@ -78,7 +80,7 @@ class HbaseBase(object):
         key = partial[0]
         last = partial[len(partial)-1]
         before = partial
-        after = partial + "ZZZZZ" # Assuming symbol <5 chars long, end is non-inclusive
+        after = partial + "ZZZZZZZZZ" # Assuming symbol <10 chars long, end is non-inclusive
         scanner = self.SYMBOLS.scanner(key, after)
         for i in scanner:
             results = i[0].columns
@@ -98,7 +100,7 @@ class HbaseBase(object):
             print "connecting to %s" %(host)
 
         for name in schema:
-            setattr(self, name.upper(), pybase.HTable(self.pool, name, schema[name]))#, createIfNotExist=True, overwrite=False))
+            setattr(self, name.upper(), pybase.HTable(self.pool, name, schema[name], createIfNotExist=True, overwrite=False))
 
 #yes
     def insert_batch2(self, parser):
@@ -107,8 +109,8 @@ class HbaseBase(object):
         for rec in parser:
             symbol = rec['symbol']
             date = rec['date']
-            symboldate = symbol+date
-            datesymbol = date+symbol
+            symboldate = symbol+DATE_DELIM+date
+            datesymbol = date+DATE_DELIM+symbol
             
             changes = {}
             fields = ['price_open', 'price_high', 'price_low', 'price_close', 'price_adj_close']
@@ -128,9 +130,8 @@ class HbaseBase(object):
             i += 1
 
 #yes
-    def get_by_symbol(self, sym): 
-        end = sym + "ZZZZZZ"
-        scanner = self.STOCKS.scanner(sym, end)
+    def get_by_symbol(self, sym):
+        scanner = self.STOCKS.scanner(get_range_start(sym), get_range_end(sym))
         results = []
         for i in scanner:
             temp = {}
@@ -145,3 +146,9 @@ class HbaseBase(object):
             temp['price_adj_close'] = tcell['price:price_adj_close'].value
             results.append(temp)
         return results
+
+def get_range_start(s):
+    return s + DATE_DELIM
+
+def get_range_end(s):
+    return s + chr(ord(DATE_DELIM) + 1)
