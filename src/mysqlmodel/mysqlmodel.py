@@ -14,7 +14,7 @@ class MySqlBase(object):
 	
     def get_date_range_by_sym(self, sym):
         cur = self.dbConn.cursor()
-	cur.execute("SELECT min(date), max(date) FROM Daily WHERE stock_symbol=%s", sym);
+	cur.execute("SELECT min(date), max(date) FROM Daily WHERE symbol=%s", sym);
 	result = cur.fetchone()
 	ranges = {}
 	ranges["min"] = result[0]
@@ -25,7 +25,7 @@ class MySqlBase(object):
 
     def get_by_sym_range2(self, sym, start, end):
 	cur = self.dbConn.cursor()
-	cur.execute("SELECT * FROM Daily WHERE stock_symbol=%s and date>=%s and date <=%s", (sym, start, end))
+	cur.execute("SELECT * FROM Daily WHERE symbol=%s and date>=%s and date <=%s", (sym, start, end))
 	query_result = cur.fetchall()
 
 	keys = ['exchange', 'symbol', 'date', 'price_open', 'price_high', 'price_low', 'price_close', 'volume', 'price_adj_close']
