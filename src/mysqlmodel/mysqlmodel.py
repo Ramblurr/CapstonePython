@@ -59,7 +59,7 @@ class MySqlBase(object):
 	return result
 
     def connect(self, host=None):
-	self.dbConn = MySQLdb.connect(host, db="Stocks")
+	self.dbConn = MySQLdb.connect(host="50.16.173.139", user="root", passwd="helloroot", db="Stocks")
 #    def insert(self, record):
 
 #    def insert_batch2(self, parser):
